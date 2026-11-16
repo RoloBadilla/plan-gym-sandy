@@ -1,6 +1,6 @@
 // Guarda la app en el celular para que funcione sin internet.
 // Siempre intenta bajar la versión nueva primero; si no hay internet, usa la guardada.
-const CACHE = 'plan-sandy-v2';
+const CACHE = 'plan-sandy-v3';
 const FILES = ['./', './index.html', './figuras.js', './manifest.json', './apple-touch-icon.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
