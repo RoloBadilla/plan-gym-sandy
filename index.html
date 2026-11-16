@@ -6,24 +6,26 @@
 <meta name="theme-color" content="#f5f5f7">
 <meta name="color-scheme" content="light">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Plan Sandy">
 <title>Plan de entrenamiento · Sandy</title>
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="apple-touch-icon.png">
 <style>
 :root{
   --bg:#f5f5f7;--card:#fff;--line:rgba(0,0,0,.08);--line2:rgba(0,0,0,.12);
   --text:#1d1d1f;--text2:#6e6e73;--text3:#a1a1a6;
-  --ink:#1d1d1f;--accent:#b5513f;--accent2:#f3e4df;--green:#2f8f5b;--green2:#e3f1e8;--blue:#2b5fb3;
+  --ink:#1d1d1f;--accent:#b5513f;--accent2:#f3e4df;--green:#2f8f5b;--green2:#e3f1e8;
   --ease:cubic-bezier(.32,.72,0,1);--spring:cubic-bezier(.34,1.3,.64,1);
   --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
 body{min-height:100dvh;padding-bottom:calc(96px + var(--sab))}
-button{font:inherit;border:0;cursor:pointer;color:inherit;background:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .14s var(--ease),background .14s var(--ease),opacity .14s}
-button:active{transform:scale(.97)}
+button,.btn{font:inherit;border:0;cursor:pointer;color:inherit;background:none;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:transform .14s var(--ease),background .14s var(--ease),opacity .14s;text-decoration:none;display:inline-block;text-align:center}
+button:active,.btn:active{transform:scale(.97)}
 .app{max-width:500px;margin:0 auto;padding:0 18px}
 .screen{display:none;padding-top:calc(18px + var(--sat))}
 .screen.active{display:block;animation:in .32s var(--ease)}
@@ -32,16 +34,29 @@ button:active{transform:scale(.97)}
 h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .sub{font-size:15px;color:var(--text2);margin-top:6px;line-height:1.45}
 .eyebrow{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
-.sec{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:28px 4px 10px;display:flex;justify-content:space-between}
-.sec span{text-transform:none;letter-spacing:0;font-weight:500}
+.sec{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:28px 4px 10px;display:flex;justify-content:space-between;gap:10px}
+.sec span{text-transform:none;letter-spacing:0;font-weight:500;text-align:right}
 .card{background:var(--card);border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 0 0 1px var(--line)}
+.cap{font-size:13px;color:var(--text2);line-height:1.45}
+
+/* buttons */
+.cta{width:100%;padding:16px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;font-size:17px;letter-spacing:-.01em}
+.cta.soft{background:var(--accent2);color:var(--accent)}
+.cta.ghost{background:var(--bg);color:var(--text);box-shadow:0 0 0 1px var(--line2)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.btns .cta{font-size:15px;padding:14px 10px}
+.link{color:var(--text2);font-size:14px;font-weight:500;padding:10px;width:100%}
 
 /* today */
 .today{padding:20px;display:flex;flex-direction:column;gap:14px}
 .today .name{font-size:22px;font-weight:700;letter-spacing:-.02em}
-.today .desc{font-size:15px;color:var(--text2);line-height:1.5}
-.cta{width:100%;padding:17px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;font-size:17px;letter-spacing:-.01em}
-.cta.sec-btn{background:var(--accent2);color:var(--accent)}
+.today .desc{font-size:15px;color:var(--text2);line-height:1.5;margin-top:6px}
+.phase-pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent);background:var(--accent2);padding:6px 11px;border-radius:99px;align-self:flex-start}
+
+/* notice cards */
+.note{padding:18px;margin-top:12px}
+.note h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.note p{font-size:14.5px;color:var(--text2);line-height:1.5;margin-bottom:12px}
 
 /* summary */
 .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -52,7 +67,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 /* week */
 .week{display:flex;padding:14px 8px}
 .week div{flex:1;text-align:center;font-size:11px;color:var(--text3);font-weight:600}
-.week div i{display:block;width:32px;height:32px;margin:6px auto 0;border-radius:50%;background:var(--bg);font-style:normal;line-height:32px;font-size:13px;font-weight:600;color:var(--text2);transition:.3s var(--spring)}
+.week div i{display:block;width:32px;height:32px;margin:6px auto 0;border-radius:50%;background:var(--bg);font-style:normal;line-height:32px;font-size:13px;font-weight:600;color:var(--text2)}
 .week div.hit i{background:var(--green);color:#fff}
 .week div.today-d{color:var(--accent)}
 .week div.today-d i{box-shadow:0 0 0 2px var(--accent) inset}
@@ -61,7 +76,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 /* day list */
 .days{display:flex;flex-direction:column;gap:10px}
 .day{display:flex;align-items:center;gap:14px;padding:16px;width:100%;text-align:left}
-.day .tag{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-weight:700;font-size:15px;flex-shrink:0;background:var(--accent2);color:var(--accent);letter-spacing:-.02em}
+.day .tag{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-weight:700;font-size:15px;flex-shrink:0;background:var(--accent2);color:var(--accent)}
 .day .tag.g{background:var(--green2);color:var(--green)}
 .day .info{flex:1;min-width:0}
 .day .info b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
@@ -71,11 +86,13 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 
 /* workout */
 .topbar{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.back{width:40px;height:40px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px var(--line);font-size:20px;display:grid;place-items:center;padding-right:2px}
-.topbar h2{flex:1;font-size:19px;font-weight:700;letter-spacing:-.02em}
+.back{width:40px;height:40px;border-radius:50%;background:var(--card);box-shadow:0 0 0 1px var(--line);font-size:20px;display:grid;place-items:center;padding-right:2px;flex-shrink:0}
+.topbar h2{flex:1;font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
 .timer{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;background:var(--card);box-shadow:0 0 0 1px var(--line);padding:9px 13px;border-radius:99px}
-.pbar{height:6px;background:rgba(0,0,0,.07);border-radius:99px;overflow:hidden;margin:12px 4px 18px}
+.pbar{height:6px;background:rgba(0,0,0,.07);border-radius:99px;overflow:hidden;margin:12px 4px 14px}
 .pbar i{display:block;height:100%;width:0;background:var(--green);border-radius:99px;transition:width .5s var(--ease)}
+.wk-note{font-size:14px;color:var(--text2);line-height:1.45;padding:12px 14px;background:var(--accent2);border-radius:14px;margin-bottom:12px}
+.wk-note b{color:var(--accent)}
 .phase{padding:16px 18px;margin-bottom:12px}
 .phase h3{font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
 .phase li,.phase p{font-size:14.5px;color:var(--text2);line-height:1.55}
@@ -89,23 +106,22 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .ex-head .meta{font-size:13.5px;color:var(--text2);margin-top:3px}
 .ex-head .meta strong{color:var(--accent);font-weight:600}
 .ex-body{padding:0 14px 14px}
-.video{position:relative;border-radius:14px;overflow:hidden;background:#111;aspect-ratio:16/9;margin-bottom:12px}
-.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.video .play{position:absolute;inset:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#1d1d1f;color:#fff;font-weight:600;font-size:14px;border-radius:0}
-.video .play:active{transform:none;opacity:.85}
-.video .play i{width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;font-style:normal;font-size:20px;padding-left:4px;border:1px solid rgba(255,255,255,.25)}
+.anim{border-radius:14px;overflow:hidden;background:#fbfbfc;box-shadow:inset 0 0 0 1px var(--line);aspect-ratio:300/210;margin-bottom:6px}
+.anim svg{display:block;width:100%;height:100%}
+.yt{display:block;font-size:13px;color:var(--text2);text-align:right;padding:4px 4px 10px;text-decoration:none}
+.yt u{text-decoration:none;color:var(--accent);font-weight:600}
 .tip{font-size:14.5px;color:var(--text2);line-height:1.5;background:var(--bg);padding:12px 14px;border-radius:12px;margin-bottom:12px}
 .tip b{color:var(--text);font-weight:600}
-.sets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.set{padding:14px 6px;border-radius:12px;background:var(--bg);box-shadow:0 0 0 1px var(--line);font-weight:600;font-size:14px;text-align:center;transition:background .2s var(--ease),color .2s,transform .14s var(--ease)}
+.sets{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px}
+.set{padding:14px 4px;border-radius:12px;background:var(--bg);box-shadow:0 0 0 1px var(--line);font-weight:600;font-size:14px;text-align:center;transition:background .2s var(--ease),color .2s,transform .14s var(--ease)}
 .set.on{background:var(--green);color:#fff;box-shadow:none}
 .tools{display:flex;gap:8px;margin-top:8px}
-.tool{flex:1;padding:13px;border-radius:12px;background:var(--accent2);font-size:14px;font-weight:600;color:var(--accent)}
+.tool{flex:1;padding:13px 8px;border-radius:12px;background:var(--accent2);font-size:14px;font-weight:600;color:var(--accent)}
 .finish{width:100%;padding:17px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;font-size:17px;margin:10px 0 24px}
 .finish:disabled{opacity:.35}
 
-/* rest overlay */
-.overlay{position:fixed;inset:0;background:rgba(245,245,247,.85);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);display:none;align-items:center;justify-content:center;z-index:50;flex-direction:column;gap:18px;padding:24px}
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(245,245,247,.88);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);display:none;align-items:center;justify-content:center;z-index:50;flex-direction:column;gap:18px;padding:24px}
 .overlay.show{display:flex;animation:fadein .25s var(--ease)}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 .overlay h3{font-size:22px;font-weight:700;letter-spacing:-.02em}
@@ -117,15 +133,41 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .overlay .row button{flex:1;padding:15px;border-radius:14px;background:var(--card);box-shadow:0 0 0 1px var(--line2);font-weight:600;font-size:15px}
 .overlay .row button.main{background:var(--ink);color:#fff;box-shadow:none}
 
+/* bottom sheet */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:80;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+.scrim.show{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:81;background:var(--card);border-radius:22px 22px 0 0;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;padding:10px 20px calc(20px + var(--sab));transform:translateY(105%);transition:transform .38s var(--ease);max-width:520px;margin:0 auto}
+.sheet.show{transform:none}
+.sheet .grab{width:38px;height:5px;border-radius:99px;background:rgba(0,0,0,.15);margin:0 auto 14px}
+.sheet h3{font-size:21px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.sheet .help{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:16px}
+.field{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.field label{font-size:16px;font-weight:500}
+.field label small{display:block;font-size:12.5px;color:var(--text3);font-weight:400;margin-top:2px}
+.field .inp{display:flex;align-items:center;gap:6px}
+.field input{width:92px;font:inherit;font-size:16px;font-weight:600;text-align:right;padding:10px 12px;border-radius:10px;border:0;background:var(--bg);color:var(--text);box-shadow:inset 0 0 0 1px var(--line);-webkit-appearance:none;appearance:none}
+.field input:focus{outline:none;box-shadow:inset 0 0 0 2px var(--accent)}
+.field .u{font-size:14px;color:var(--text2);width:22px}
+.sheet .cta{margin-top:18px}
+
 /* progress */
 .hist{overflow:hidden}
-.hist > div{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);font-size:15px}
+.hist > div{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);font-size:15px;gap:10px}
 .hist > div:last-child{border-bottom:0}
 .hist b{font-weight:600;letter-spacing:-.01em}
 .hist span{color:var(--text2);font-size:13px}
-.empty{color:var(--text2);font-size:15px;text-align:center;padding:30px 20px;line-height:1.5}
+.empty{color:var(--text2);font-size:15px;text-align:center;padding:26px 20px;line-height:1.5}
 .badge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--accent2);color:var(--accent)}
-.danger{color:var(--text3);font-size:14px;display:block;margin:22px auto 10px;padding:10px 16px}
+.danger{color:var(--text3);font-size:14px;display:block;margin:18px auto 10px;padding:10px 16px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+.mgrid div{background:var(--bg);border-radius:12px;padding:12px 14px}
+.mgrid b{display:block;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.mgrid b small{font-size:13px;font-weight:500;color:var(--text2);margin-left:2px}
+.mgrid span{font-size:12.5px;color:var(--text2)}
+.mgrid em{display:block;font-style:normal;font-size:12.5px;color:var(--text2);margin-top:2px}
+.mhist{margin-top:12px;border-top:1px solid var(--line)}
+.mhist div{display:flex;justify-content:space-between;padding:10px 2px;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--text2);gap:8px}
+.mhist div b{color:var(--text);font-weight:600}
 
 /* guide */
 .g{padding:18px;margin-bottom:12px}
@@ -133,7 +175,8 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .g p,.g li{font-size:15px;color:var(--text2);line-height:1.6}
 .g ul{padding-left:18px}
 .g b{color:var(--text);font-weight:600}
-.sign{font-size:14px;color:var(--text2);text-align:center;padding:10px 0 20px;line-height:1.5}
+.g .cta{margin-top:12px}
+.sign{font-size:14px;color:var(--text2);text-align:center;padding:14px 0 20px;line-height:1.5}
 
 /* tab bar */
 nav{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(245,245,247,.82);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--line);padding:6px 0 calc(6px + var(--sab))}
@@ -142,17 +185,16 @@ nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
 nav button svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav button.on{color:var(--ink)}
 
-.toast{position:fixed;left:50%;bottom:calc(104px + var(--sab));transform:translateX(-50%) translateY(12px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:99px;font-size:14px;font-weight:600;opacity:0;transition:.3s var(--spring);z-index:60;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.toast{position:fixed;left:50%;top:calc(12px + var(--sat));transform:translateX(-50%) translateY(-12px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:99px;font-size:14px;font-weight:600;opacity:0;transition:.3s var(--spring);z-index:90;pointer-events:none;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .toast.show{opacity:1;transform:translateX(-50%)}
-.celebrate{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(245,245,247,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:70;text-align:center;padding:24px}
+.celebrate{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(245,245,247,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:70;text-align:center;padding:24px}
 .celebrate.show{display:flex}
-.celebrate .box{animation:pop .45s var(--spring);max-width:340px}
+.celebrate .box{animation:pop .45s var(--spring);max-width:340px;width:100%}
 @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
 .celebrate .check{width:84px;height:84px;border-radius:50%;background:var(--green);margin:0 auto;display:grid;place-items:center}
 .celebrate .check svg{width:40px;height:40px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .celebrate h2{font-size:28px;font-weight:700;letter-spacing:-.025em;margin:18px 0 8px}
 .celebrate p{color:var(--text2);font-size:16px;margin-bottom:26px;line-height:1.5}
-.celebrate button{background:var(--ink);color:#fff;padding:15px 28px;border-radius:14px;font-weight:600;font-size:16px;width:100%}
 
 @media (hover:hover) and (pointer:fine){
   .day:hover{box-shadow:0 2px 8px rgba(0,0,0,.08),0 0 0 1px var(--line2)}
@@ -174,6 +216,7 @@ nav button.on{color:var(--ink)}
 
   <div class="sec">Para hoy</div>
   <div class="card today" id="today"></div>
+  <div id="notice"></div>
 
   <div class="sec">Resumen <span id="week-range"></span></div>
   <div class="sum">
@@ -196,6 +239,7 @@ nav button.on{color:var(--ink)}
     <div class="timer" id="w-timer">00:00</div>
   </div>
   <div class="pbar"><i id="w-prog"></i></div>
+  <div class="wk-note" id="w-note"></div>
   <div class="card phase">
     <h3>Calentamiento · 5 minutos</h3>
     <ul>
@@ -228,9 +272,24 @@ nav button.on{color:var(--ink)}
   </div>
   <div class="sec">Fase actual</div>
   <div class="card g" id="p-phase"></div>
+
+  <div class="sec">Medidas <span>una vez al mes</span></div>
+  <div class="card g" id="m-box"></div>
+
   <div class="sec">Historial</div>
   <div class="card hist" id="p-hist"></div>
-  <button class="danger" onclick="resetAll()">Borrar historial</button>
+
+  <div class="sec">Copia de seguridad</div>
+  <div class="card g">
+    <p>Tu progreso se guarda solo en este celular. Guarda una copia de vez en cuando, así no lo pierdes si cambias de teléfono o borras datos.</p>
+    <p class="cap" id="b-last" style="margin-top:8px"></p>
+    <div class="btns">
+      <button class="cta" onclick="backupSave()">Guardar copia</button>
+      <button class="cta ghost" onclick="document.getElementById('b-file').click()">Recuperar copia</button>
+    </div>
+    <input type="file" id="b-file" accept=".json,application/json,text/plain" hidden>
+  </div>
+  <button class="danger" onclick="askReset()">Borrar todo el historial</button>
 </section>
 
 <!-- GUÍA -->
@@ -239,15 +298,28 @@ nav button.on{color:var(--ink)}
   <p class="sub" style="margin-bottom:18px">Léelo una vez con calma. Después solo tendrás que seguir la sesión del día.</p>
   <div class="card g"><h3>Cómo organizar la semana</h3>
     <p>La idea es hacer la <b>Sesión A el lunes, la B el miércoles y la C el viernes</b>. El cardio suave puede ir el sábado o el domingo. Si un día no se puede, se pasa al siguiente, pero siempre deja al menos un día de descanso entre sesiones de fuerza.</p></div>
+  <div class="card g"><h3>Recordatorios</h3>
+    <p>Te puedo avisar <b>los lunes, miércoles y viernes a las 5:30 p. m.</b> El aviso queda guardado en el Calendario de tu celular, así que te llega aunque no abras la app.</p>
+    <a class="cta btn" href="recordatorios.ics" target="_blank" rel="noopener" onclick="remindersAdded()">Agregar recordatorios</a>
+    <p class="cap" style="margin-top:10px">Para quitarlos, borra el evento "Hora de entrenar" en tu Calendario.</p></div>
   <div class="card g"><h3>Velocidad y descansos</h3>
-    <p>Cada repetición se hace con control: <b>dos segundos para bajar y uno para subir</b>. Entre series descansa de 45 segundos a un minuto. La aplicación te lleva la cuenta.</p></div>
-  <div class="card g"><h3>Cómo ir subiendo</h3>
+    <p>Cada repetición se hace con control: <b>dos segundos para bajar y uno para subir</b>. Los dibujos de cada ejercicio se mueven a ese mismo ritmo. Entre series, la app te lleva la cuenta del descanso.</p></div>
+  <div class="card g"><h3>El plan sube solo</h3>
     <ul>
-      <li><b>Semanas 1 y 2.</b> Si cuesta, haz dos series por ejercicio. Lo que importa es aprender la técnica.</li>
-      <li><b>Semanas 3 y 4.</b> Completa las tres series.</li>
-      <li><b>Semana 5 en adelante.</b> Sube a cuatro series, baja el descanso a 30 segundos o usa botellas más pesadas.</li>
+      <li><b>Semanas 1 y 2.</b> Dos series por ejercicio, para aprender bien cada movimiento.</li>
+      <li><b>Semanas 3 y 4.</b> Tres series.</li>
+      <li><b>Semana 5 en adelante.</b> Cuatro series, descansos de 45 segundos y 10 segundos más en los ejercicios de tiempo.</li>
     </ul>
-    <p style="margin-top:8px">La regla es simple: si terminas todas las repeticiones con buena forma y sin molestias, toca subir. Si no logras mantener la forma, usa la versión más fácil del ejercicio.</p></div>
+    <p style="margin-top:8px">La app cuenta las semanas desde tu primera sesión y ajusta las series sola. Si en algún momento no logras mantener la forma, haz una serie menos ese día.</p></div>
+  <div class="card g"><h3>Cómo tomar las medidas</h3>
+    <p>Una vez al mes, en la mañana y antes de desayunar. Usa una cinta métrica de costura, pegada a la piel pero sin apretar.</p>
+    <ul style="margin-top:6px">
+      <li><b>Cintura:</b> a la altura del ombligo.</li>
+      <li><b>Cadera:</b> en la parte más ancha de los glúteos.</li>
+      <li><b>Pierna:</b> en la parte más ancha del muslo derecho.</li>
+      <li><b>Brazo:</b> a mitad del brazo derecho, relajado.</li>
+    </ul>
+    <p style="margin-top:8px">El peso es opcional. Al tonificar, a veces la báscula casi no cambia y las medidas sí.</p></div>
   <div class="card g"><h3>Qué necesitas</h3>
     <p>Tu propio peso. Si quieres, <b>dos botellas de agua</b> de litro o litro y medio y una <b>banda elástica</b>. Una colchoneta o una toalla gruesa para los ejercicios en el piso.</p></div>
   <div class="card g"><h3>Para que se note</h3>
@@ -277,31 +349,37 @@ nav button.on{color:var(--ink)}
   <div class="check"><svg viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19 7"/></svg></div>
   <h2>Sesión terminada</h2>
   <p id="cel-text"></p>
-  <button onclick="celClose()">Volver al inicio</button>
+  <button class="cta" onclick="celClose()">Volver al inicio</button>
 </div></div>
+
+<div class="scrim" id="scrim" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
 
 <div class="toast" id="toast"></div>
 
+<script src="figuras.js"></script>
 <script>
+// ---------- Ejercicios ----------
+// v = video de YouTube (opcional, necesita internet). time = ejercicio por tiempo (segundos).
 const EX = {
-  squat:{n:'Sentadilla con pausa',s:3,r:'15 repeticiones',m:'Glúteos y cuádriceps',v:'qsAkuNORgmk',t:'Pies al ancho de los hombros. Baja llevando la cadera hacia atrás y <b>quédate dos segundos abajo</b>. Sube empujando con los talones. Las rodillas apuntan siempre hacia donde apuntan los pies.'},
-  bridge:{n:'Puente de glúteo',s:3,r:'15 repeticiones',m:'Glúteos e isquiotibiales',v:'xGzXTn4o0wE',t:'Acostada boca arriba, con los pies cerca del glúteo. Sube la cadera apretando el glúteo y <b>aguanta dos segundos arriba</b>. No arquees la espalda baja.'},
-  rlunge:{n:'Zancada hacia atrás, alternando',s:3,r:'10 por pierna',m:'Glúteos y cuádriceps',v:'PHA9tVMRsj8',t:'Da un paso atrás y baja hasta que la rodilla de atrás casi toque el piso. El tronco se queda recto. Sube empujando con la pierna de adelante.'},
-  kick:{n:'Patada de glúteo en cuatro apoyos',s:3,r:'12 por lado',m:'Glúteo mayor',v:'dbqagbN6gNs',t:'Manos bajo los hombros y rodillas bajo la cadera. Lleva la planta del pie hacia el techo con la rodilla doblada, <b>aprieta el glúteo arriba</b> y baja despacio. La espalda no se mueve.'},
-  sumo:{n:'Sentadilla sumo',s:3,r:'15 repeticiones',m:'Glúteos y parte interna del muslo',v:'spdPi9YYhBU',t:'Pies más abiertos que los hombros y puntas hacia afuera. Baja recta con el pecho arriba. Si quieres más carga, sostén una botella contra el pecho.'},
-  plank:{n:'Plancha',s:3,r:'30 segundos',m:'Abdomen completo',v:'xeVZvvzHaw0',t:'Codos bajo los hombros y el cuerpo en línea recta de la cabeza a los talones. Aprieta abdomen y glúteos. Si la cadera se cae, descansa y vuelve.',time:30},
-  pushup:{n:'Flexiones',s:3,r:'8 a 12 repeticiones',m:'Pecho, tríceps y hombro',v:'movupEBZphE',t:'Empieza <b>con las rodillas apoyadas</b>. Manos un poco más abiertas que los hombros y codos a 45 grados. Baja el pecho con control y sube. Cuando te salgan 12 sin problema, pasa a hacerlas con los pies.'},
-  dips:{n:'Fondos de tríceps en silla',s:3,r:'10 a 12 repeticiones',m:'Tríceps',v:'cd9ENqQttTc',t:'Manos en el borde de una silla firme. Piernas dobladas para que sea más fácil, estiradas para que cueste más. Baja doblando los codos hacia atrás, no hacia los lados.'},
-  row:{n:'Remo inclinada',s:3,r:'12 repeticiones',m:'Espalda y bíceps',v:'4GIKJ7GTea8',t:'Con la banda o las botellas. Inclina el tronco con la espalda recta y lleva los codos hacia atrás, <b>juntando los omóplatos</b>. Baja despacio.'},
-  lateral:{n:'Elevaciones laterales',s:3,r:'12 repeticiones',m:'Hombros',v:'V3LaKO8iZUE',t:'Con las botellas. Sube los brazos a los lados hasta la altura de los hombros, con los codos un poco doblados y sin impulso. Baja en dos segundos.'},
-  superman:{n:'Superman',s:3,r:'12 repeticiones',m:'Espalda baja y glúteos',v:'7p4l-KnxxaY',t:'Boca abajo con los brazos al frente. Levanta brazos y piernas a la vez, aguanta un segundo y baja. Mira al piso para no forzar el cuello.'},
-  deadbug:{n:'Dead bug',s:3,r:'10 por lado',m:'Abdomen profundo',v:'SPTBzZdINlg',t:'Boca arriba, rodillas a 90 grados y brazos hacia el techo. Estira el brazo y la pierna contrarios sin que la <b>espalda baja se despegue del piso</b>. Vuelve y cambia de lado.'},
-  sldl:{n:'Peso muerto a una pierna',s:3,r:'10 por lado',m:'Glúteos, isquiotibiales y equilibrio',v:'u8g_1Q_E8G4',t:'Sin peso. Inclina el tronco hacia adelante mientras la otra pierna va hacia atrás, con la espalda recta. Baja hasta donde sientas el estiramiento y sube apretando el glúteo.'},
-  jump:{n:'Sentadilla con salto suave',s:3,r:'10 repeticiones',m:'Piernas y resistencia',v:'O354UJHUrYs',t:'Sentadilla normal y un salto pequeño. <b>Aterriza suave</b>, con las rodillas dobladas y sin hacer ruido. Si te molestan las rodillas, hazla sin salto.'},
-  climb:{n:'Escaladores lentos',s:3,r:'30 segundos',m:'Abdomen y hombros',v:'XWlDAy4_Dvw',t:'En posición de plancha con los brazos estirados. Lleva una rodilla al pecho y luego la otra, <b>lento y con control</b>. Cadera baja y espalda plana.',time:30},
-  bike:{n:'Abdominal bicicleta',s:3,r:'16 repeticiones',m:'Abdomen y oblicuos',v:'dYxamPVcKvk',t:'Boca arriba, con las manos a los lados de la cabeza. Lleva el codo a la rodilla contraria girando el tronco. No jales del cuello: el giro sale del abdomen.'},
-  sideplank:{n:'Plancha lateral',s:3,r:'20 segundos por lado',m:'Oblicuos y cintura',v:'kyOeSuh7LLo',t:'Codo bajo el hombro y el cuerpo en línea. <b>Apoya las rodillas si hace falta.</b> La cadera se mantiene arriba todo el tiempo.',time:20},
-  bridge1:{n:'Puente de glúteo a una pierna',s:3,r:'10 por lado',m:'Glúteos',v:'7f4Ey9AnRyY',t:'Igual que el puente normal, pero con una pierna estirada. Sube la cadera sin que se incline hacia un lado y aprieta el glúteo arriba.'}
+  squat:{n:'Sentadilla con pausa',r:'15 repeticiones',m:'Glúteos y cuádriceps',v:'qsAkuNORgmk',t:'Pies al ancho de los hombros. Baja llevando la cadera hacia atrás y <b>quédate dos segundos abajo</b>. Sube empujando con los talones. Las rodillas apuntan siempre hacia donde apuntan los pies.'},
+  bridge:{n:'Puente de glúteo',r:'15 repeticiones',m:'Glúteos e isquiotibiales',v:'xGzXTn4o0wE',t:'Acostada boca arriba, con los pies cerca del glúteo. Sube la cadera apretando el glúteo y <b>aguanta dos segundos arriba</b>. No arquees la espalda baja.'},
+  rlunge:{n:'Zancada hacia atrás, alternando',r:'10 por pierna',m:'Glúteos y cuádriceps',v:'PHA9tVMRsj8',t:'Da un paso atrás y baja hasta que la rodilla de atrás casi toque el piso. El tronco se queda recto. Sube empujando con la pierna de adelante.'},
+  kick:{n:'Patada de glúteo en cuatro apoyos',r:'12 por lado',m:'Glúteo mayor',v:'dbqagbN6gNs',t:'Manos bajo los hombros y rodillas bajo la cadera. Lleva la planta del pie hacia el techo con la rodilla doblada, <b>aprieta el glúteo arriba</b> y baja despacio. La espalda no se mueve.'},
+  sumo:{n:'Sentadilla sumo',r:'15 repeticiones',m:'Glúteos y parte interna del muslo',v:'spdPi9YYhBU',t:'Pies más abiertos que los hombros y puntas hacia afuera. Baja recta con el pecho arriba. Si quieres más carga, sostén una botella contra el pecho.'},
+  plank:{n:'Plancha',time:30,m:'Abdomen completo',v:'xeVZvvzHaw0',t:'Codos bajo los hombros y el cuerpo en línea recta de la cabeza a los talones. Aprieta abdomen y glúteos. Si la cadera se cae, descansa y vuelve.'},
+  pushup:{n:'Flexiones',r:'8 a 12 repeticiones',m:'Pecho, tríceps y hombro',v:'movupEBZphE',t:'Empieza <b>con las rodillas apoyadas</b>. Manos un poco más abiertas que los hombros y codos a 45 grados. Baja el pecho con control y sube. Cuando te salgan 12 sin problema, pasa a hacerlas con los pies.'},
+  dips:{n:'Fondos de tríceps en silla',r:'10 a 12 repeticiones',m:'Tríceps',v:'cd9ENqQttTc',t:'Manos en el borde de una silla firme. Piernas dobladas para que sea más fácil, estiradas para que cueste más. Baja doblando los codos hacia atrás, no hacia los lados.'},
+  row:{n:'Remo inclinada',r:'12 repeticiones',m:'Espalda y bíceps',v:'4GIKJ7GTea8',t:'Con la banda o las botellas. Inclina el tronco con la espalda recta y lleva los codos hacia atrás, <b>juntando los omóplatos</b>. Baja despacio.'},
+  lateral:{n:'Elevaciones laterales',r:'12 repeticiones',m:'Hombros',v:'V3LaKO8iZUE',t:'Con las botellas. Sube los brazos a los lados hasta la altura de los hombros, con los codos un poco doblados y sin impulso. Baja en dos segundos.'},
+  superman:{n:'Superman',r:'12 repeticiones',m:'Espalda baja y glúteos',v:'7p4l-KnxxaY',t:'Boca abajo con los brazos al frente. Levanta brazos y piernas a la vez, aguanta un segundo y baja. Mira al piso para no forzar el cuello.'},
+  deadbug:{n:'Dead bug',r:'10 por lado',m:'Abdomen profundo',v:'SPTBzZdINlg',t:'Boca arriba, rodillas a 90 grados y brazos hacia el techo. Estira el brazo y la pierna contrarios sin que la <b>espalda baja se despegue del piso</b>. Vuelve y cambia de lado.'},
+  sldl:{n:'Peso muerto a una pierna',r:'10 por lado',m:'Glúteos, isquiotibiales y equilibrio',v:'u8g_1Q_E8G4',t:'Sin peso. Inclina el tronco hacia adelante mientras la otra pierna va hacia atrás, con la espalda recta. Baja hasta donde sientas el estiramiento y sube apretando el glúteo.'},
+  jump:{n:'Sentadilla con salto suave',r:'10 repeticiones',m:'Piernas y resistencia',v:'O354UJHUrYs',t:'Sentadilla normal y un salto pequeño. <b>Aterriza suave</b>, con las rodillas dobladas y sin hacer ruido. Si te molestan las rodillas, hazla sin salto.'},
+  climb:{n:'Escaladores lentos',time:30,m:'Abdomen y hombros',v:'XWlDAy4_Dvw',t:'En posición de plancha con los brazos estirados. Lleva una rodilla al pecho y luego la otra, <b>lento y con control</b>. Cadera baja y espalda plana.'},
+  bike:{n:'Abdominal bicicleta',r:'16 repeticiones',m:'Abdomen y oblicuos',v:'dYxamPVcKvk',t:'Boca arriba, con las manos a los lados de la cabeza. Lleva el codo a la rodilla contraria girando el tronco. No jales del cuello: el giro sale del abdomen.'},
+  sideplank:{n:'Plancha lateral',time:20,side:true,m:'Oblicuos y cintura',v:'kyOeSuh7LLo',t:'Codo bajo el hombro y el cuerpo en línea. <b>Apoya las rodillas si hace falta.</b> La cadera se mantiene arriba todo el tiempo.'},
+  bridge1:{n:'Puente de glúteo a una pierna',r:'10 por lado',m:'Glúteos',v:'7f4Ey9AnRyY',t:'Igual que el puente normal, pero con una pierna estirada. Sube la cadera sin que se incline hacia un lado y aprieta el glúteo arriba.'}
 };
 const DAYS = {
   A:{title:'Sesión A · Piernas y glúteos',short:'Sesión A',tag:'A',sub:'Piernas y glúteos',list:['squat','bridge','rlunge','kick','sumo','plank'],min:40},
@@ -309,41 +387,61 @@ const DAYS = {
   C:{title:'Sesión C · Cuerpo completo',short:'Sesión C',tag:'C',sub:'Cuerpo completo y abdomen',list:['sldl','jump','bridge1','climb','bike','sideplank'],min:40},
   D:{title:'Cardio suave y abdomen',short:'Cardio',tag:'+',sub:'Opcional · 25 a 30 minutos',list:['bike','deadbug','plank'],min:30,cardio:true}
 };
+const MEAS = [
+  {k:'cintura',n:'Cintura',u:'cm',h:'A la altura del ombligo'},
+  {k:'cadera',n:'Cadera',u:'cm',h:'La parte más ancha'},
+  {k:'pierna',n:'Pierna',u:'cm',h:'Muslo, la parte más ancha'},
+  {k:'brazo',n:'Brazo',u:'cm',h:'A mitad del brazo'},
+  {k:'peso',n:'Peso',u:'kg',h:'Opcional'}
+];
 
-let DB = {history:[],start:null};
-try{ const raw=localStorage.getItem('sandyfit'); if(raw) DB=Object.assign(DB,JSON.parse(raw)); }catch(e){}
-function save(){ try{ localStorage.setItem('sandyfit',JSON.stringify(DB)); }catch(e){} }
+// ---------- Datos guardados ----------
+let DB = {history:[],start:null,measures:[],lastBackup:null,remind:false,noticeOff:{}};
+function load(){ try{ const raw=localStorage.getItem('sandyfit'); if(raw) DB=Object.assign(DB,JSON.parse(raw)); }catch(e){} DB.measures=DB.measures||[]; DB.noticeOff=DB.noticeOff||{}; }
+load();
+function save(){ try{ localStorage.setItem('sandyfit',JSON.stringify(DB)); }catch(e){ toast('No se pudo guardar en este celular'); } }
 
+// ---------- Utilidades ----------
 const DN=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 const dayKey=d=>{const x=new Date(d);x.setMinutes(x.getMinutes()-x.getTimezoneOffset());return x.toISOString().slice(0,10);};
+const fromKey=k=>new Date(k+'T12:00');
+const longDate=k=>{const d=fromKey(k);return d.getDate()+' de '+d.toLocaleDateString('es',{month:'long'});};
 function weekStart(d){ const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
-function thisWeekSessions(){ const ws=weekStart(new Date()); return DB.history.filter(h=>!h.cardio && new Date(h.date+'T12:00')>=ws); }
+function thisWeekSessions(){ const ws=weekStart(new Date()); return DB.history.filter(h=>!h.cardio && fromKey(h.date)>=ws); }
 function streak(){
-  if(!DB.history.length) return 0;
+  const strength=DB.history.filter(h=>!h.cardio); if(!strength.length) return 0;
   let n=0, ws=weekStart(new Date());
-  const strength=DB.history.filter(h=>!h.cardio);
-  if(strength.filter(h=>new Date(h.date+'T12:00')>=ws).length>=3) n++;
+  if(strength.filter(h=>fromKey(h.date)>=ws).length>=3) n++;
   let w=new Date(ws);
   while(true){
     const prev=new Date(w); prev.setDate(prev.getDate()-7);
-    const c=strength.filter(h=>{const t=new Date(h.date+'T12:00');return t>=prev&&t<w;}).length;
+    const c=strength.filter(h=>{const t=fromKey(h.date);return t>=prev&&t<w;}).length;
     if(c>=3){n++; w=prev;} else break;
   }
   return n;
 }
-function planWeek(){ if(!DB.start) return 1; const diff=(weekStart(new Date())-weekStart(new Date(DB.start+'T12:00')))/864e5; return Math.max(1,Math.floor(diff/7)+1); }
-function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2200); }
+function planWeek(){ if(!DB.start) return 1; const diff=(weekStart(new Date())-weekStart(fromKey(DB.start)))/864e5; return Math.max(1,Math.round(diff/7)+1); }
+// El plan cambia solo según la semana
+function phase(){
+  const w=planWeek();
+  if(w<=2) return {w,sets:2,rest:60,extra:0,name:'Semanas 1 y 2: aprender la técnica',short:'2 series por ejercicio',txt:'Dos series por ejercicio. Concéntrate en hacer cada repetición bien y sin prisa.'};
+  if(w<=4) return {w,sets:3,rest:60,extra:0,name:'Semanas 3 y 4: consolidar',short:'3 series por ejercicio',txt:'Tres series por ejercicio, cuidando la forma.'};
+  return {w,sets:4,rest:45,extra:10,name:'Semana 5 en adelante: subir el reto',short:'4 series y descansos de 45 s',txt:'Cuatro series por ejercicio, descansos de 45 segundos y 10 segundos más en los ejercicios de tiempo. Si todo te sale fácil, usa botellas más pesadas.'};
+}
+function reps(e,ph){ return e.time ? `${e.time+ph.extra} segundos${e.side?' por lado':''}` : e.r; }
+function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2400); }
 const pad=n=>String(n).padStart(2,'0');
 const fmt=s=>pad(Math.floor(s/60))+':'+pad(s%60);
 function haptic(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+const daysSince=k=>Math.floor((fromKey(dayKey(new Date()))-fromKey(k))/864e5);
 
-// Which session is next: A, then B, then C within the week
 function nextSession(){
   const done=thisWeekSessions().map(x=>x.day);
   for(const k of ['A','B','C']) if(!done.includes(k)) return k;
   return null;
 }
 
+// ---------- Inicio ----------
 function renderHome(){
   const h=new Date().getHours();
   document.getElementById('greet').textContent = h<12?'Buenos días':h<18?'Buenas tardes':'Buenas noches';
@@ -356,17 +454,18 @@ function renderHome(){
   const we=new Date(ws); we.setDate(we.getDate()+6);
   document.getElementById('week-range').textContent=ws.getDate()+' al '+we.getDate()+' de '+we.toLocaleDateString('es',{month:'long'});
 
-  // today card
+  const ph=phase();
   const nk=nextSession(), doneToday=DB.history.find(x=>x.date===today);
   const t=document.getElementById('today');
   if(doneToday){
-    t.innerHTML=`<div><div class="eyebrow">Hoy ya entrenaste</div><div class="name">${doneToday.cardio?'Cardio suave':DAYS[doneToday.day].short} completada</div><div class="desc" style="margin-top:6px">${doneToday.min} minutos. Buen trabajo. Descansa y mañana seguimos.</div></div>`;
+    t.innerHTML=`<div><div class="eyebrow">Hoy ya entrenaste</div><div class="name">${doneToday.cardio?'Cardio suave':DAYS[doneToday.day].short} completada</div><div class="desc">${doneToday.min} ${doneToday.min===1?'minuto':'minutos'}. Buen trabajo. Descansa y mañana seguimos.</div></div>`;
   } else if(nk){
     const d=DAYS[nk];
-    t.innerHTML=`<div><div class="eyebrow">Te toca</div><div class="name">${d.short}: ${d.sub}</div><div class="desc" style="margin-top:6px">${d.list.length} ejercicios, unos ${d.min} minutos con calentamiento y estiramiento.</div></div><button class="cta" onclick="startWorkout('${nk}')">Empezar sesión</button>`;
+    t.innerHTML=`<div><div class="eyebrow">Te toca</div><div class="name">${d.short}: ${d.sub}</div><div class="desc">${d.list.length} ejercicios, unos ${d.min} minutos con calentamiento y estiramiento.</div></div><span class="phase-pill">Semana ${ph.w} · ${ph.short}</span><button class="cta" onclick="startWorkout('${nk}')">Empezar sesión</button>`;
   } else {
-    t.innerHTML=`<div><div class="eyebrow">Semana completa</div><div class="name">Ya hiciste las tres sesiones</div><div class="desc" style="margin-top:6px">Si quieres, puedes hacer el cardio suave o repetir una sesión.</div></div><button class="cta sec-btn" onclick="startWorkout('D')">Hacer cardio suave</button>`;
+    t.innerHTML=`<div><div class="eyebrow">Semana completa</div><div class="name">Ya hiciste las tres sesiones</div><div class="desc">Si quieres, puedes hacer el cardio suave o repetir una sesión.</div></div><button class="cta soft" onclick="startWorkout('D')">Hacer cardio suave</button>`;
   }
+  renderNotice();
 
   let html='';
   for(let i=0;i<7;i++){
@@ -378,7 +477,7 @@ function renderHome(){
 
   const doneDays=wkList.map(x=>x.day);
   document.getElementById('days').innerHTML=Object.entries(DAYS).map(([k,d])=>{
-    const done=doneDays.includes(k) || (d.cardio && DB.history.some(x=>x.cardio && new Date(x.date+'T12:00')>=ws));
+    const done=doneDays.includes(k) || (d.cardio && DB.history.some(x=>x.cardio && fromKey(x.date)>=ws));
     return `<button class="card day" onclick="startWorkout('${k}')">
       <div class="tag ${d.cardio?'g':''}">${d.tag}</div>
       <div class="info"><b>${d.short}</b><span>${d.sub} · ${d.list.length} ejercicios · ${d.min} min</span></div>
@@ -386,33 +485,50 @@ function renderHome(){
   }).join('');
 }
 
+// Un solo aviso a la vez en el inicio, el más importante primero
+function renderNotice(){
+  const box=document.getElementById('notice');
+  const lastM=DB.measures[0];
+  const today=dayKey(new Date());
+  if(!DB.remind && !DB.noticeOff.remind){
+    box.innerHTML=`<div class="card note"><h3>Activa tus recordatorios</h3><p>Te aviso los lunes, miércoles y viernes a las 5:30 p. m. El aviso queda en el Calendario de tu celular.</p><a class="cta btn" href="recordatorios.ics" target="_blank" rel="noopener" onclick="remindersAdded()">Agregar recordatorios</a><button class="link" onclick="hideNotice('remind')">Ahora no</button></div>`;
+  } else if((!lastM || daysSince(lastM.date)>=28) && DB.noticeOff.measure!==today){
+    box.innerHTML=`<div class="card note"><h3>${lastM?'Toca tomar medidas':'Anota tus medidas iniciales'}</h3><p>${lastM?`La última vez fue el ${longDate(lastM.date)}. Te toma dos minutos y es la mejor forma de ver el avance.`:'Así, dentro de un mes, vas a poder comparar y ver el cambio.'}</p><button class="cta" onclick="openMeasure()">Anotar medidas</button><button class="link" onclick="hideNotice('measure')">Más tarde</button></div>`;
+  } else box.innerHTML='';
+}
+function hideNotice(k){ DB.noticeOff[k]= k==='measure' ? dayKey(new Date()) : true; save(); renderNotice(); }
+function remindersAdded(){ DB.remind=true; save(); setTimeout(()=>{ renderNotice(); toast('Toca "Agregar todo" en el Calendario'); },600); }
+
+// ---------- Sesión ----------
 let W=null, wTick=null;
 function startWorkout(k){
-  const d=DAYS[k];
-  W={key:k,day:d,sets:{},start:Date.now()};
+  const d=DAYS[k], ph=phase();
+  W={key:k,day:d,sets:{},start:Date.now(),ph};
   document.getElementById('w-title').textContent=d.title;
+  document.getElementById('w-note').innerHTML=`<b>Semana ${ph.w}.</b> ${ph.txt}`;
+  if(window.Figuras) Figuras.unmountAll();
   let html='';
   if(d.cardio) html+=`<div class="card phase"><h3>Cardio suave · 20 minutos</h3><p>Caminata rápida, bicicleta fija o bailar. A un ritmo en el que puedas hablar pero no cantar. Al terminar, 10 minutos de abdomen suave con los ejercicios de abajo.</p></div>`;
   d.list.forEach((id,i)=>{
-    const e=EX[id]; W.sets[id]=Array(e.s).fill(false);
+    const e=EX[id]; const n=ph.sets; W.sets[id]=Array(n).fill(false);
+    const tm=e.time?e.time+ph.extra:0;
     html+=`<div class="card ex" id="ex-${id}">
-      <div class="ex-head"><div class="ex-num">${i+1}</div><div><b>${e.n}</b><div class="meta"><strong>${e.s} series de ${e.r}</strong> · ${e.m}</div></div></div>
+      <div class="ex-head"><div class="ex-num">${i+1}</div><div><b>${e.n}</b><div class="meta"><strong>${n} series de ${reps(e,ph)}</strong> · ${e.m}</div></div></div>
       <div class="ex-body">
-        <div class="video" id="v-${id}"><button class="play" onclick="loadVideo('${id}')"><i>▶</i>Ver el ejercicio en video</button></div>
+        <div class="anim" data-fig="${id}"></div>
+        ${e.v?`<a class="yt" href="https://www.youtube.com/watch?v=${e.v}" target="_blank" rel="noopener">¿Dudas? <u>Ver video explicado</u> (necesita internet)</a>`:''}
         <div class="tip">${e.t}</div>
-        <div class="sets">${Array.from({length:e.s},(_,j)=>`<button class="set" id="set-${id}-${j}" onclick="toggleSet('${id}',${j})">Serie ${j+1}</button>`).join('')}</div>
-        <div class="tools">${e.time?`<button class="tool" onclick="openRest(${e.time},'${e.n}')">Cronómetro de ${e.time} s</button>`:''}<button class="tool" onclick="openRest(60,'Descanso')">Descanso de 60 s</button></div>
+        <div class="sets" style="--n:${n}">${Array.from({length:n},(_,j)=>`<button class="set" id="set-${id}-${j}" onclick="toggleSet('${id}',${j})">Serie ${j+1}</button>`).join('')}</div>
+        <div class="tools">${tm?`<button class="tool" onclick="openRest(${tm},'${e.n}')">Cronómetro de ${tm} s</button>`:''}<button class="tool" onclick="openRest(${ph.rest},'Descanso')">Descanso de ${ph.rest} s</button></div>
       </div></div>`;
   });
   document.getElementById('w-list').innerHTML=html;
+  go('workout');
+  if(window.Figuras) document.querySelectorAll('#w-list .anim').forEach(el=>Figuras.mount(el, el.dataset.fig));
   updateProg();
   clearInterval(wTick);
   document.getElementById('w-timer').textContent='00:00';
   wTick=setInterval(()=>{ document.getElementById('w-timer').textContent=fmt(Math.floor((Date.now()-W.start)/1000)); },1000);
-  go('workout');
-}
-function loadVideo(id){
-  document.getElementById('v-'+id).innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${EX[id].v}?rel=0&modestbranding=1&playsinline=1" title="${EX[id].n}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
 }
 function toggleSet(id,j){
   W.sets[id][j]=!W.sets[id][j];
@@ -421,7 +537,7 @@ function toggleSet(id,j){
   document.getElementById('ex-'+id).classList.toggle('complete',all);
   if(W.sets[id][j]) haptic(10);
   if(all) toast(EX[id].n+': completado');
-  else if(W.sets[id][j] && !EX[id].time) openRest(60,'Descanso');
+  else if(W.sets[id][j] && !EX[id].time) openRest(W.ph.rest,'Descanso');
   updateProg();
 }
 function updateProg(){
@@ -438,11 +554,12 @@ function finishWorkout(){
   DB.history.unshift({date:dayKey(new Date()),day:W.key,cardio:!!W.day.cardio,min:mins,sets:done,total:all.length});
   save(); haptic([30,40,30]);
   const wk=thisWeekSessions().length;
-  document.getElementById('cel-text').textContent = `${W.day.short}, ${mins} minutos, ${done} de ${all.length} series. ${!W.day.cardio && wk>=3 ? 'Con esta completaste la semana.' : !W.day.cardio ? `Llevas ${wk} de 3 esta semana.` : 'Buen complemento para la semana.'}`;
+  document.getElementById('cel-text').textContent = `${W.day.short}, ${mins} ${mins===1?'minuto':'minutos'}, ${done} de ${all.length} series. ${!W.day.cardio && wk>=3 ? 'Con esta completaste la semana.' : !W.day.cardio ? `Llevas ${wk} de 3 esta semana.` : 'Buen complemento para la semana.'}`;
   document.getElementById('celebrate').classList.add('show');
 }
 function celClose(){ document.getElementById('celebrate').classList.remove('show'); go('home'); }
 
+// ---------- Descanso ----------
 let rLeft=0,rTotal=0,rT=null;
 function openRest(sec,label){
   rLeft=rTotal=sec; document.getElementById('rest-label').textContent=label;
@@ -454,26 +571,92 @@ function restAdd(n){ rLeft+=n; rTotal+=n; drawRest(); }
 function restClose(){ clearInterval(rT); document.getElementById('rest').classList.remove('show'); }
 function beep(){ try{ const c=new (window.AudioContext||window.webkitAudioContext)(); const o=c.createOscillator(), g=c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value=880; g.gain.value=.15; o.start(); setTimeout(()=>{o.stop();c.close();},350); haptic(200);}catch(e){} }
 
+// ---------- Hoja inferior (formularios y confirmaciones) ----------
+function openSheet(html){ const s=document.getElementById('sheet'); s.innerHTML='<div class="grab"></div>'+html; document.getElementById('scrim').classList.add('show'); requestAnimationFrame(()=>s.classList.add('show')); }
+function closeSheet(){ document.getElementById('sheet').classList.remove('show'); document.getElementById('scrim').classList.remove('show'); }
+function ask(title,text,ok,cb,danger){
+  openSheet(`<h3>${title}</h3><p class="help">${text}</p><button class="cta" style="${danger?'background:var(--accent)':''}" id="ask-ok">${ok}</button><button class="link" onclick="closeSheet()">Cancelar</button>`);
+  document.getElementById('ask-ok').onclick=()=>{ closeSheet(); cb(); };
+}
+
+// ---------- Medidas ----------
+function openMeasure(){
+  const last=DB.measures[0]||{};
+  openSheet(`<h3>Medidas de hoy</h3><p class="help">Mide en la mañana, con la cinta pegada a la piel pero sin apretar. Puedes dejar en blanco lo que no quieras anotar.</p>
+    <form id="m-form" onsubmit="saveMeasure(event)">${MEAS.map(m=>`<div class="field"><label for="m-${m.k}">${m.n}<small>${m.h}</small></label><div class="inp"><input id="m-${m.k}" type="number" inputmode="decimal" step="0.1" min="0" placeholder="${last[m.k]??''}"><span class="u">${m.u}</span></div></div>`).join('')}
+    <button class="cta" type="submit">Guardar medidas</button></form><button class="link" onclick="closeSheet()">Cancelar</button>`);
+}
+function saveMeasure(ev){
+  ev.preventDefault();
+  const rec={date:dayKey(new Date())}; let any=false;
+  for(const m of MEAS){ const v=parseFloat(document.getElementById('m-'+m.k).value.replace(',','.')); if(!isNaN(v)&&v>0){ rec[m.k]=Math.round(v*10)/10; any=true; } }
+  if(!any){ toast('Anota al menos una medida'); return; }
+  DB.measures=DB.measures.filter(x=>x.date!==rec.date); DB.measures.unshift(rec); save();
+  closeSheet(); toast('Medidas guardadas'); renderProgress(); renderNotice();
+}
+function renderMeasures(){
+  const box=document.getElementById('m-box'), M=DB.measures;
+  if(!M.length){ box.innerHTML=`<p>Anota tus medidas hoy y repítelo una vez al mes. Así vas a poder ver el cambio aunque la báscula no se mueva.</p><button class="cta" onclick="openMeasure()">Anotar mis primeras medidas</button>`; return; }
+  const first=M[M.length-1], last=M[0];
+  const cells=MEAS.filter(m=>last[m.k]!=null).map(m=>{
+    let ch='';
+    if(M.length>1 && first[m.k]!=null && first!==last){ const d=Math.round((last[m.k]-first[m.k])*10)/10; ch = d===0?'Sin cambio':`${d>0?'+':'−'}${Math.abs(d)} ${m.u} desde el inicio`; }
+    return `<div><span>${m.n}</span><b>${last[m.k]}<small>${m.u}</small></b>${ch?`<em>${ch}</em>`:''}</div>`;
+  }).join('');
+  const hist=M.length>1?`<div class="mhist">${M.map(x=>`<div><b>${longDate(x.date)}</b><span>${MEAS.filter(m=>x[m.k]!=null).map(m=>`${m.n} ${x[m.k]}`).join(' · ')}</span></div>`).join('')}</div>`:'';
+  const due=daysSince(last.date)>=28;
+  box.innerHTML=`<p class="cap" style="margin-bottom:10px">Últimas medidas: ${longDate(last.date)}${due?' · ya toca medir de nuevo':''}</p><div class="mgrid">${cells}</div>${hist}<button class="cta ${due?'':'ghost'}" style="margin-top:14px" onclick="openMeasure()">Anotar medidas de hoy</button>`;
+}
+
+// ---------- Copia de seguridad ----------
+async function backupSave(){
+  const payload=JSON.stringify({app:'plan-sandy',version:1,saved:new Date().toISOString(),data:DB},null,1);
+  const name=`plan-sandy-copia-${dayKey(new Date())}.json`;
+  let ok=false;
+  try{
+    const file=new File([payload],name,{type:'application/json'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'Copia de mi plan'}); ok=true; }
+  }catch(e){ if(e && e.name==='AbortError') return; }
+  if(!ok){
+    try{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([payload],{type:'application/json'})); a.download=name; document.body.appendChild(a); a.click(); a.remove(); ok=true; }catch(e){}
+  }
+  if(ok){ DB.lastBackup=dayKey(new Date()); save(); renderBackup(); toast('Copia lista. Guárdala en Archivos o envíatela.'); }
+  else toast('No se pudo crear la copia');
+}
+document.getElementById('b-file').addEventListener('change', async ev=>{
+  const f=ev.target.files[0]; ev.target.value=''; if(!f) return;
+  try{
+    const obj=JSON.parse(await f.text());
+    if(obj.app!=='plan-sandy' || !obj.data || !Array.isArray(obj.data.history)) throw 0;
+    const n=obj.data.history.length, when=obj.saved?longDate(dayKey(new Date(obj.saved))):'una fecha anterior';
+    ask('Recuperar copia',`Esta copia es del ${when} y tiene ${n} ${n===1?'sesión':'sesiones'}. Va a reemplazar lo que tienes ahora en este celular.`,'Recuperar',()=>{
+      DB=Object.assign({history:[],start:null,measures:[],lastBackup:null,remind:false,noticeOff:{}},obj.data); save(); renderProgress(); renderHome(); toast('Progreso recuperado');
+    });
+  }catch(e){ toast('Ese archivo no es una copia del plan'); }
+});
+function renderBackup(){ document.getElementById('b-last').textContent = DB.lastBackup ? `Última copia: ${longDate(DB.lastBackup)}.` : 'Todavía no has guardado ninguna copia.'; }
+
+// ---------- Progreso ----------
 function renderProgress(){
   document.getElementById('p-total').textContent=DB.history.length;
   document.getElementById('p-min').textContent=DB.history.reduce((a,b)=>a+b.min,0);
-  const pw=planWeek(); document.getElementById('p-week').textContent=pw;
-  const ph = pw<=2 ? ['Semanas 1 y 2: aprender la técnica','Si cuesta, haz dos series por ejercicio. Concéntrate en hacer cada repetición bien y sin prisa.']
-         : pw<=4 ? ['Semanas 3 y 4: consolidar','Completa las tres series de cada ejercicio manteniendo la forma.']
-         : ['Semana 5 en adelante: subir el reto','Pasa a cuatro series, baja el descanso a 30 segundos o usa botellas más pesadas. Si todo sale fácil, es el momento de subir.'];
-  document.getElementById('p-phase').innerHTML=`<h3>${ph[0]}</h3><p>${ph[1]}</p>`;
+  const ph=phase(); document.getElementById('p-week').textContent=ph.w;
+  document.getElementById('p-phase').innerHTML=`<h3>${ph.name}</h3><p>${ph.txt}</p>`;
+  renderMeasures(); renderBackup();
   const h=document.getElementById('p-hist');
   if(!DB.history.length){ h.innerHTML='<div class="empty">Todavía no hay sesiones registradas.<br>Aquí irán apareciendo conforme las termines.</div>'; return; }
-  h.innerHTML=DB.history.slice(0,30).map(x=>{
-    const d=new Date(x.date+'T12:00'); const name=x.cardio?'Cardio suave':DAYS[x.day].short+' · '+DAYS[x.day].sub;
-    return `<div><div><b>${name}</b><br><span>${DN[d.getDay()]} ${d.getDate()} de ${d.toLocaleDateString('es',{month:'long'})}</span></div><div style="text-align:right"><span class="badge">${x.min} min</span><br><span>${x.sets} de ${x.total} series</span></div></div>`;
+  h.innerHTML=DB.history.slice(0,40).map(x=>{
+    const d=fromKey(x.date); const name=x.cardio?'Cardio suave':DAYS[x.day].short+' · '+DAYS[x.day].sub;
+    return `<div><div><b>${name}</b><br><span>${DN[d.getDay()]} ${longDate(x.date)}</span></div><div style="text-align:right;flex-shrink:0"><span class="badge">${x.min} min</span><br><span>${x.sets} de ${x.total} series</span></div></div>`;
   }).join('');
 }
-function resetAll(){
-  if(!resetAll.armed){ resetAll.armed=true; toast('Toca otra vez para confirmar'); setTimeout(()=>resetAll.armed=false,3000); return; }
-  DB={history:[],start:null}; save(); renderProgress(); renderHome(); toast('Historial borrado');
+function askReset(){
+  ask('Borrar todo el historial','Se borran las sesiones y las medidas de este celular. Si tienes una copia guardada, la puedes recuperar después.','Borrar todo',()=>{
+    DB={history:[],start:null,measures:[],lastBackup:null,remind:DB.remind,noticeOff:{}}; save(); renderProgress(); renderHome(); toast('Historial borrado');
+  },true);
 }
 
+// ---------- Navegación ----------
 function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('s-'+s).classList.add('active');
@@ -483,6 +666,9 @@ function go(s){
   window.scrollTo(0,0);
 }
 renderHome();
+
+// Funciona sin internet después de la primera vez
+if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 </script>
 </body>
 </html>
