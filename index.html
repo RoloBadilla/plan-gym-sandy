@@ -120,6 +120,9 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .set{padding:14px 4px;border-radius:12px;background:var(--bg);box-shadow:0 0 0 1px var(--line);font-weight:600;font-size:14px;text-align:center;transition:background .2s var(--ease),color .2s,transform .14s var(--ease)}
 .set.on{background:var(--green);color:#fff;box-shadow:none}
 .set small{display:block;font-size:12px;font-weight:500;opacity:.85;margin-top:2px}
+.why{font-size:14px;color:var(--text2);line-height:1.5;margin:0 18px 12px;padding-left:40px}
+.why b{color:var(--text);font-weight:600}
+.g-why{font-size:14px;color:var(--text2);line-height:1.5;margin:6px 2px 0}
 .last{font-size:13px;color:var(--text2);margin:0 2px 10px}
 .last b{color:var(--text);font-weight:600}
 .nums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px}
@@ -414,24 +417,24 @@ nav button.on{color:var(--ink)}
 // ---------- Ejercicios ----------
 // v = video de YouTube (opcional, necesita internet). time = ejercicio por tiempo (segundos).
 const EX = {
-  squat:{n:'Sentadilla con pausa',r:'15 repeticiones',m:'Glúteos y cuádriceps',v:'qsAkuNORgmk',t:'Pies al ancho de los hombros. Baja llevando la cadera hacia atrás y <b>quédate dos segundos abajo</b>. Sube empujando con los talones. Las rodillas apuntan siempre hacia donde apuntan los pies.'},
-  bridge:{n:'Puente de glúteo',r:'15 repeticiones',m:'Glúteos e isquiotibiales',v:'xGzXTn4o0wE',t:'Acostada boca arriba, con los pies cerca del glúteo. Sube la cadera apretando el glúteo y <b>aguanta dos segundos arriba</b>. No arquees la espalda baja.'},
-  rlunge:{n:'Zancada hacia atrás, alternando',r:'10 por pierna',m:'Glúteos y cuádriceps',v:'PHA9tVMRsj8',t:'Da un paso atrás y baja hasta que la rodilla de atrás casi toque el piso. El tronco se queda recto. Sube empujando con la pierna de adelante.'},
-  kick:{n:'Patada de glúteo en cuatro apoyos',r:'12 por lado',m:'Glúteo mayor',v:'dbqagbN6gNs',t:'Manos bajo los hombros y rodillas bajo la cadera. Lleva la planta del pie hacia el techo con la rodilla doblada, <b>aprieta el glúteo arriba</b> y baja despacio. La espalda no se mueve.'},
-  sumo:{n:'Sentadilla sumo',r:'15 repeticiones',m:'Glúteos y parte interna del muslo',v:'spdPi9YYhBU',t:'Pies más abiertos que los hombros y puntas hacia afuera. Baja recta con el pecho arriba. Si quieres más carga, sostén una botella contra el pecho.'},
-  plank:{n:'Plancha',time:30,m:'Abdomen completo',v:'xeVZvvzHaw0',t:'Codos bajo los hombros y el cuerpo en línea recta de la cabeza a los talones. Aprieta abdomen y glúteos. Si la cadera se cae, descansa y vuelve.'},
-  pushup:{n:'Flexiones',r:'8 a 12 repeticiones',m:'Pecho, tríceps y hombro',v:'movupEBZphE',t:'Empieza <b>con las rodillas apoyadas</b>. Manos un poco más abiertas que los hombros y codos a 45 grados. Baja el pecho con control y sube. Cuando te salgan 12 sin problema, pasa a hacerlas con los pies.'},
-  dips:{n:'Fondos de tríceps en silla',r:'10 a 12 repeticiones',m:'Tríceps',v:'cd9ENqQttTc',t:'Manos en el borde de una silla firme. Piernas dobladas para que sea más fácil, estiradas para que cueste más. Baja doblando los codos hacia atrás, no hacia los lados.'},
-  row:{n:'Remo inclinada',r:'12 repeticiones',m:'Espalda y bíceps',v:'4GIKJ7GTea8',t:'Con la banda o las botellas. Inclina el tronco con la espalda recta y lleva los codos hacia atrás, <b>juntando los omóplatos</b>. Baja despacio.'},
-  lateral:{n:'Elevaciones laterales',r:'12 repeticiones',m:'Hombros',v:'V3LaKO8iZUE',t:'Con las botellas. Sube los brazos a los lados hasta la altura de los hombros, con los codos un poco doblados y sin impulso. Baja en dos segundos.'},
-  superman:{n:'Superman',r:'12 repeticiones',m:'Espalda baja y glúteos',v:'7p4l-KnxxaY',t:'Boca abajo con los brazos al frente. Levanta brazos y piernas a la vez, aguanta un segundo y baja. Mira al piso para no forzar el cuello.'},
-  deadbug:{n:'Dead bug',r:'10 por lado',m:'Abdomen profundo',v:'SPTBzZdINlg',t:'Boca arriba, rodillas a 90 grados y brazos hacia el techo. Estira el brazo y la pierna contrarios sin que la <b>espalda baja se despegue del piso</b>. Vuelve y cambia de lado.'},
-  sldl:{n:'Peso muerto a una pierna',r:'10 por lado',m:'Glúteos, isquiotibiales y equilibrio',v:'u8g_1Q_E8G4',t:'Sin peso. Inclina el tronco hacia adelante mientras la otra pierna va hacia atrás, con la espalda recta. Baja hasta donde sientas el estiramiento y sube apretando el glúteo.'},
-  jump:{n:'Sentadilla con salto suave',r:'10 repeticiones',m:'Piernas y resistencia',v:'O354UJHUrYs',t:'Sentadilla normal y un salto pequeño. <b>Aterriza suave</b>, con las rodillas dobladas y sin hacer ruido. Si te molestan las rodillas, hazla sin salto.'},
-  climb:{n:'Escaladores lentos',time:30,m:'Abdomen y hombros',v:'XWlDAy4_Dvw',t:'En posición de plancha con los brazos estirados. Lleva una rodilla al pecho y luego la otra, <b>lento y con control</b>. Cadera baja y espalda plana.'},
-  bike:{n:'Abdominal bicicleta',r:'16 repeticiones',m:'Abdomen y oblicuos',v:'dYxamPVcKvk',t:'Boca arriba, con las manos a los lados de la cabeza. Lleva el codo a la rodilla contraria girando el tronco. No jales del cuello: el giro sale del abdomen.'},
-  sideplank:{n:'Plancha lateral',time:20,side:true,m:'Oblicuos y cintura',v:'kyOeSuh7LLo',t:'Codo bajo el hombro y el cuerpo en línea. <b>Apoya las rodillas si hace falta.</b> La cadera se mantiene arriba todo el tiempo.'},
-  bridge1:{n:'Puente de glúteo a una pierna',r:'10 por lado',m:'Glúteos',v:'7f4Ey9AnRyY',t:'Igual que el puente normal, pero con una pierna estirada. Sube la cadera sin que se incline hacia un lado y aprieta el glúteo arriba.'}
+  squat:{p:'Es el ejercicio base para piernas y glúteos. La pausa abajo hace que trabajen sin impulso.',n:'Sentadilla con pausa',r:'15 repeticiones',m:'Glúteos y cuádriceps',v:'qsAkuNORgmk',t:'Pies al ancho de los hombros. Baja llevando la cadera hacia atrás y <b>quédate dos segundos abajo</b>. Sube empujando con los talones. Las rodillas apuntan siempre hacia donde apuntan los pies.'},
+  bridge:{p:'Trabaja el glúteo casi sin cargar la espalda. Es de los que más lo levantan y le dan forma.',n:'Puente de glúteo',r:'15 repeticiones',m:'Glúteos e isquiotibiales',v:'xGzXTn4o0wE',t:'Acostada boca arriba, con los pies cerca del glúteo. Sube la cadera apretando el glúteo y <b>aguanta dos segundos arriba</b>. No arquees la espalda baja.'},
+  rlunge:{p:'Trabaja cada pierna por separado: corrige si un lado es más fuerte y mejora el equilibrio.',n:'Zancada hacia atrás, alternando',r:'10 por pierna',m:'Glúteos y cuádriceps',v:'PHA9tVMRsj8',t:'Da un paso atrás y baja hasta que la rodilla de atrás casi toque el piso. El tronco se queda recto. Sube empujando con la pierna de adelante.'},
+  kick:{p:'Trabaja la parte de arriba del glúteo, la que le da la forma redondeada.',n:'Patada de glúteo en cuatro apoyos',r:'12 por lado',m:'Glúteo mayor',v:'dbqagbN6gNs',t:'Manos bajo los hombros y rodillas bajo la cadera. Lleva la planta del pie hacia el techo con la rodilla doblada, <b>aprieta el glúteo arriba</b> y baja despacio. La espalda no se mueve.'},
+  sumo:{p:'Con los pies abiertos trabaja más la parte interna del muslo, una zona difícil de tonificar.',n:'Sentadilla sumo',r:'15 repeticiones',m:'Glúteos y parte interna del muslo',v:'spdPi9YYhBU',t:'Pies más abiertos que los hombros y puntas hacia afuera. Baja recta con el pecho arriba. Si quieres más carga, sostén una botella contra el pecho.'},
+  plank:{p:'Fortalece todo el abdomen a la vez y ayuda a la postura.',n:'Plancha',time:30,m:'Abdomen completo',v:'xeVZvvzHaw0',t:'Codos bajo los hombros y el cuerpo en línea recta de la cabeza a los talones. Aprieta abdomen y glúteos. Si la cadera se cae, descansa y vuelve.'},
+  pushup:{p:'Trabaja pecho, hombros y la parte de atrás del brazo.',n:'Flexiones',r:'8 a 12 repeticiones',m:'Pecho, tríceps y hombro',v:'movupEBZphE',t:'Empieza <b>con las rodillas apoyadas</b>. Manos un poco más abiertas que los hombros y codos a 45 grados. Baja el pecho con control y sube. Cuando te salgan 12 sin problema, pasa a hacerlas con los pies.'},
+  dips:{p:'Va directo al tríceps, la parte de atrás del brazo que suele quedar flácida.',n:'Fondos de tríceps en silla',r:'10 a 12 repeticiones',m:'Tríceps',v:'cd9ENqQttTc',t:'Manos en el borde de una silla firme. Piernas dobladas para que sea más fácil, estiradas para que cueste más. Baja doblando los codos hacia atrás, no hacia los lados.'},
+  row:{p:'Fortalece la espalda alta y mejora la postura: hombros atrás y espalda recta.',n:'Remo inclinada',r:'12 repeticiones',m:'Espalda y bíceps',v:'4GIKJ7GTea8',t:'Con la banda o las botellas. Inclina el tronco con la espalda recta y lleva los codos hacia atrás, <b>juntando los omóplatos</b>. Baja despacio.'},
+  lateral:{p:'Le da forma a los hombros, y eso hace que la cintura se vea más pequeña.',n:'Elevaciones laterales',r:'12 repeticiones',m:'Hombros',v:'V3LaKO8iZUE',t:'Con las botellas. Sube los brazos a los lados hasta la altura de los hombros, con los codos un poco doblados y sin impulso. Baja en dos segundos.'},
+  superman:{p:'Fortalece la espalda baja y previene dolores. Equilibra el trabajo de abdomen.',n:'Superman',r:'12 repeticiones',m:'Espalda baja y glúteos',v:'7p4l-KnxxaY',t:'Boca abajo con los brazos al frente. Levanta brazos y piernas a la vez, aguanta un segundo y baja. Mira al piso para no forzar el cuello.'},
+  deadbug:{p:'Trabaja el abdomen profundo, el que aplana la panza, sin forzar el cuello.',n:'Dead bug',r:'10 por lado',m:'Abdomen profundo',v:'SPTBzZdINlg',t:'Boca arriba, rodillas a 90 grados y brazos hacia el techo. Estira el brazo y la pierna contrarios sin que la <b>espalda baja se despegue del piso</b>. Vuelve y cambia de lado.'},
+  sldl:{p:'Trabaja glúteos y la parte de atrás del muslo, además del equilibrio.',n:'Peso muerto a una pierna',r:'10 por lado',m:'Glúteos, isquiotibiales y equilibrio',v:'u8g_1Q_E8G4',t:'Sin peso. Inclina el tronco hacia adelante mientras la otra pierna va hacia atrás, con la espalda recta. Baja hasta donde sientas el estiramiento y sube apretando el glúteo.'},
+  jump:{p:'Sube las pulsaciones, quema más y le da potencia a las piernas.',n:'Sentadilla con salto suave',r:'10 repeticiones',m:'Piernas y resistencia',v:'O354UJHUrYs',t:'Sentadilla normal y un salto pequeño. <b>Aterriza suave</b>, con las rodillas dobladas y sin hacer ruido. Si te molestan las rodillas, hazla sin salto.'},
+  climb:{p:'Trabaja abdomen y hombros, con un poco de cardio.',n:'Escaladores lentos',time:30,m:'Abdomen y hombros',v:'XWlDAy4_Dvw',t:'En posición de plancha con los brazos estirados. Lleva una rodilla al pecho y luego la otra, <b>lento y con control</b>. Cadera baja y espalda plana.'},
+  bike:{p:'Trabaja los costados del abdomen (oblicuos), que marcan la cintura.',n:'Abdominal bicicleta',r:'16 repeticiones',m:'Abdomen y oblicuos',v:'dYxamPVcKvk',t:'Boca arriba, con las manos a los lados de la cabeza. Lleva el codo a la rodilla contraria girando el tronco. No jales del cuello: el giro sale del abdomen.'},
+  sideplank:{p:'Trabaja los oblicuos para definir la cintura y estabilizar la cadera.',n:'Plancha lateral',time:20,side:true,m:'Oblicuos y cintura',v:'kyOeSuh7LLo',t:'Codo bajo el hombro y el cuerpo en línea. <b>Apoya las rodillas si hace falta.</b> La cadera se mantiene arriba todo el tiempo.'},
+  bridge1:{p:'Es una versión más difícil del puente, para seguir avanzando con el glúteo.',n:'Puente de glúteo a una pierna',r:'10 por lado',m:'Glúteos',v:'7f4Ey9AnRyY',t:'Igual que el puente normal, pero con una pierna estirada. Sube la cadera sin que se incline hacia un lado y aprieta el glúteo arriba.'}
 };
 const DAYS = {
   A:{title:'Sesión A · Piernas y glúteos',short:'Sesión A',tag:'A',sub:'Piernas y glúteos',list:['squat','bridge','rlunge','kick','sumo','plank'],min:40},
@@ -441,11 +444,11 @@ const DAYS = {
 };
 // Calentamiento y estiramiento guiados (s = segundos; sides = se hace de cada lado)
 const GUIDES = {
-  warm:{title:'Calentamiento',steps:[
+  warm:{title:'Calentamiento',why:'Prepara rodillas, cadera y hombros para que entrenes mejor y sin lesionarte.',steps:[
     {id:'march',n:'Marcha en el lugar',s:120,t:'Sube las rodillas hasta la altura de la cadera y mueve los brazos al ritmo. Paso cómodo, sin saltar.'},
     {id:'armcircle',n:'Círculos de brazos',s:60,flip:true,t:'Brazos estirados a los lados, haz círculos grandes y lentos. A la mitad del tiempo, cambia de dirección.'},
     {id:'halfsquat',n:'Sentadillas lentas',s:120,t:'Baja solo hasta la mitad, despacio, y sube. Es para calentar rodillas y cadera, no para cansarte.'}]},
-  stretch:{title:'Estiramiento',steps:[
+  stretch:{title:'Estiramiento',why:'Ayuda a que los músculos se recuperen, baja el dolor del día siguiente y mantiene la flexibilidad.',steps:[
     {id:'quad',n:'Cuádriceps de pie',s:30,sides:true,t:'Apóyate en una pared con una mano. Con la otra, lleva el talón al glúteo. Rodillas juntas y espalda recta.'},
     {id:'ham',n:'Isquiotibiales sentada',s:45,t:'Sentada con las piernas estiradas, inclínate hacia adelante con la espalda recta y lleva las manos hacia los pies. Sin rebotar.'},
     {id:'fig4',n:'Glúteo en figura 4',s:30,sides:true,t:'Boca arriba, cruza un tobillo sobre la rodilla contraria y jala esa pierna hacia el pecho. Lo sientes en el glúteo.'},
@@ -584,6 +587,7 @@ function startWorkout(k){
     const tm=e.time?e.time+ph.extra:0;
     html+=`<div class="card ex" id="ex-${id}">
       <div class="ex-head"><div class="ex-num">${i+1}</div><div><b>${e.n}</b><div class="meta"><strong>${n} series de ${reps(e,ph)}</strong> · ${e.m}</div></div></div>
+      <p class="why"><b>Para qué sirve:</b> ${e.p}</p>
       <div class="ex-body">
         <div class="anim" data-fig="${id}"></div>
         ${e.v?`<a class="yt" href="https://www.youtube.com/watch?v=${e.v}" target="_blank" rel="noopener">¿Dudas? <u>Ver video explicado</u> (necesita internet)</a>`:''}
@@ -704,7 +708,7 @@ function renderGuide(key){
   const g=G[key], gd=GUIDES[key], box=document.getElementById('g-'+key);
   if(W && W.day.cardio && key==='warm'){ box.style.display='none'; return; } else box.style.display='';
   const cur=g.u[Math.min(g.idx,g.u.length-1)];
-  const head=`<div class="g-head"><h3>${gd.title}</h3>${g.done?'<span class="ok">Hecho</span>':`<span>${totalMin(key)}</span>`}</div>`;
+  const head=`<div class="g-head"><h3>${gd.title}</h3>${g.done?'<span class="ok">Hecho</span>':`<span>${totalMin(key)}</span>`}</div>${g.done?'':`<p class="g-why">${gd.why}</p>`}`;
   const steps=`<div class="g-steps">${gd.steps.map((st,i)=>{ const state = g.done || i<cur.i ? 'ok' : (i===cur.i ? 'cur' : ''); return `<div class="${state}"><i>${state==='ok'?'✓':i+1}</i>${st.n}<span>${st.sides?st.s+' s por lado':(st.s>=60?st.s/60+' min':st.s+' s')}</span></div>`; }).join('')}</div>`;
   if(g.done){ box.innerHTML=head+steps; return; }
   const label = g.running ? 'Pausa' : (g.idx===0 && g.left===cur.s*1000 ? `Empezar ${gd.title.toLowerCase()}` : 'Seguir');
