@@ -119,6 +119,22 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .sets{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px}
 .set{padding:14px 4px;border-radius:12px;background:var(--bg);box-shadow:0 0 0 1px var(--line);font-weight:600;font-size:14px;text-align:center;transition:background .2s var(--ease),color .2s,transform .14s var(--ease)}
 .set.on{background:var(--green);color:#fff;box-shadow:none}
+.set small{display:block;font-size:12px;font-weight:500;opacity:.85;margin-top:2px}
+.last{font-size:13px;color:var(--text2);margin:0 2px 10px}
+.last b{color:var(--text);font-weight:600}
+.nums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px}
+.nums button{padding:14px 0;border-radius:12px;background:var(--bg);box-shadow:0 0 0 1px var(--line);font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.nums button.goal{box-shadow:0 0 0 2px var(--accent);color:var(--accent)}
+.nums button.cur{background:var(--green);color:#fff;box-shadow:none}
+.nums-other{display:flex;gap:8px;margin-top:12px;align-items:center}
+.nums-other input{flex:1;font:inherit;font-size:16px;font-weight:600;padding:12px 14px;border-radius:12px;border:0;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line);-webkit-appearance:none;appearance:none}
+.nums-other input:focus{outline:none;box-shadow:inset 0 0 0 2px var(--accent)}
+.nums-other .cta{width:auto;padding:12px 18px;font-size:15px}
+.hist > div.h-row{cursor:pointer}
+.h-detail{display:none;padding:2px 18px 14px !important;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch !important;gap:4px !important}
+.h-detail.open{display:flex !important}
+.h-detail p{display:flex;justify-content:space-between;font-size:13.5px;color:var(--text2);gap:10px}
+.h-detail p b{color:var(--text);font-weight:500}
 .tools{display:flex;gap:8px;margin-top:8px}
 .tool{flex:1;padding:13px 8px;border-radius:12px;background:var(--accent2);font-size:14px;font-weight:600;color:var(--accent)}
 
@@ -394,7 +410,7 @@ nav button.on{color:var(--ink)}
 
 <div class="toast" id="toast"></div>
 
-<script src="figuras.js?v=5"></script>
+<script src="figuras.js?v=6"></script>
 <script>
 // ---------- Ejercicios ----------
 // v = video de YouTube (opcional, necesita internet). time = ejercicio por tiempo (segundos).
@@ -477,6 +493,10 @@ function phase(){
   if(w<=4) return {w,sets:3,rest:60,extra:0,name:'Semanas 3 y 4: consolidar',short:'3 series por ejercicio',txt:'Tres series por ejercicio, cuidando la forma.'};
   return {w,sets:4,rest:45,extra:10,name:'Semana 5 en adelante: subir el reto',short:'4 series y descansos de 45 s',txt:'Cuatro series por ejercicio, descansos de 45 segundos y 10 segundos más en los ejercicios de tiempo. Si todo te sale fácil, usa botellas más pesadas.'};
 }
+// Meta de cada serie (número) para sugerir en el selector
+function goal(e,ph){ if(e.time) return e.time+ph.extra; const m=(e.r||'').match(/\d+/g); return m?parseInt(m[m.length>1?1:0]):10; }
+function unitOf(e){ return e.time ? 's' : ''; }
+function lastFor(id){ for(const h of DB.history){ if(h.detail && h.detail[id] && h.detail[id].some(v=>v!=null)) return {date:h.date,v:h.detail[id]}; } return null; }
 function reps(e,ph){ return e.time ? `${e.time+ph.extra} segundos${e.side?' por lado':''}` : e.r; }
 function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),2400); }
 const pad=n=>String(n).padStart(2,'0');
@@ -561,7 +581,7 @@ function startWorkout(k){
   let html='';
   if(d.cardio) html+=`<div class="card phase"><h3>Cardio suave · 20 minutos</h3><p>Caminata rápida, bicicleta fija o bailar. A un ritmo en el que puedas hablar pero no cantar. Al terminar, 10 minutos de abdomen suave con los ejercicios de abajo.</p></div>`;
   d.list.forEach((id,i)=>{
-    const e=EX[id]; const n=ph.sets; W.sets[id]=Array(n).fill(false);
+    const e=EX[id]; const n=ph.sets; W.sets[id]=Array(n).fill(null);
     const tm=e.time?e.time+ph.extra:0;
     html+=`<div class="card ex" id="ex-${id}">
       <div class="ex-head"><div class="ex-num">${i+1}</div><div><b>${e.n}</b><div class="meta"><strong>${n} series de ${reps(e,ph)}</strong> · ${e.m}</div></div></div>
@@ -569,6 +589,7 @@ function startWorkout(k){
         <div class="anim" data-fig="${id}"></div>
         ${e.v?`<a class="yt" href="https://www.youtube.com/watch?v=${e.v}" target="_blank" rel="noopener">¿Dudas? <u>Ver video explicado</u> (necesita internet)</a>`:''}
         <div class="tip">${e.t}</div>
+        ${(()=>{ const l=lastFor(id); return l?`<p class="last">La última vez: <b>${l.v.filter(v=>v!=null).map(v=>v+(e.time?' s':'')).join(' · ')}</b></p>`:''; })()}
         <div class="sets" style="--n:${n}">${Array.from({length:n},(_,j)=>`<button class="set" id="set-${id}-${j}" onclick="toggleSet('${id}',${j})">Serie ${j+1}</button>`).join('')}</div>
         <div class="tools">${tm?`<button class="tool" onclick="openRest(${tm},'${e.n}')">Cronómetro de ${tm} s</button>`:''}<button class="tool" onclick="openRest(${ph.rest},'Descanso')">Descanso de ${ph.rest} s</button></div>
       </div></div>`;
@@ -589,8 +610,8 @@ function tickSession(){
   document.getElementById('w-timer').classList.toggle('paused',W.state==='paused');
   tickGuide();
 }
-function allDone(){ return Object.values(W.sets).flat().every(Boolean); }
-function setsDone(){ const a=Object.values(W.sets).flat(); return [a.filter(Boolean).length,a.length]; }
+function allDone(){ return Object.values(W.sets).flat().every(v=>v!=null); }
+function setsDone(){ const a=Object.values(W.sets).flat(); return [a.filter(v=>v!=null).length,a.length]; }
 function updateBar(){
   const m=document.getElementById('w-main'), st=document.getElementById('w-stop'), early=document.getElementById('w-early');
   const [done,total]=setsDone();
@@ -616,16 +637,32 @@ function stopSession(){
   toast('Sesión en pausa'); updateBar(); tickSession();
 }
 function toggleSet(id,j){
-  if(W.state==='idle') startRunning();
-  if(W.state==='paused') startRunning();
-  W.sets[id][j]=!W.sets[id][j];
-  document.getElementById(`set-${id}-${j}`).classList.toggle('on',W.sets[id][j]);
-  const all=W.sets[id].every(Boolean);
+  const e=EX[id], g=goal(e,W.ph), cur=W.sets[id][j], u=e.time?' s':'';
+  let opts=[];
+  if(e.time){ for(let v=Math.max(5,g-20); v<=g+15; v+=5) opts.push(v); }
+  else { for(let v=Math.max(1,g-9); v<=g+5; v++) opts.push(v); }
+  const q = e.time ? `¿Cuántos segundos aguantaste${e.side?' (en cada lado)':''}? La meta es ${g} s.` : `¿Cuántas repeticiones hiciste${/lado|pierna/.test(e.r)?' (en cada lado)':''}? La meta es ${e.r.replace(' repeticiones','')}.`;
+  openSheet(`<h3>Serie ${j+1} · ${e.n}</h3><p class="help">${q}</p>
+    <div class="nums">${opts.map(v=>`<button class="${v===cur?'cur':(v===g?'goal':'')}" onclick="chooseReps('${id}',${j},${v})">${v}</button>`).join('')}</div>
+    <form class="nums-other" onsubmit="event.preventDefault(); const v=parseInt(this.n.value); if(v>0) chooseReps('${id}',${j},v);">
+      <input name="n" type="number" inputmode="numeric" min="1" placeholder="Otro número${u?' (segundos)':''}"><button class="cta" type="submit">Listo</button></form>
+    ${cur!=null?`<button class="link" onclick="chooseReps('${id}',${j},null)">Desmarcar esta serie</button>`:`<button class="link" onclick="closeSheet()">Cancelar</button>`}`);
+}
+function chooseReps(id,j,v){
+  closeSheet();
+  if(v!=null && W.state!=='running') startRunning();
+  const was=W.sets[id][j]; W.sets[id][j]=v;
+  const btn=document.getElementById(`set-${id}-${j}`), e=EX[id];
+  btn.classList.toggle('on',v!=null);
+  btn.innerHTML = v!=null ? `Serie ${j+1}<small>${v}${e.time?' s':' reps'}</small>` : `Serie ${j+1}`;
+  const all=W.sets[id].every(x=>x!=null);
   document.getElementById('ex-'+id).classList.toggle('complete',all);
-  if(W.sets[id][j]) haptic(10);
-  if(allDone()) toast('Listo. Haz el estiramiento y toca Terminar');
-  else if(all) toast(EX[id].n+': completado');
-  else if(W.sets[id][j] && !EX[id].time) openRest(W.ph.rest,'Descanso');
+  if(v!=null) haptic(10);
+  if(v!=null && was==null){
+    if(allDone()) toast('Listo. Haz el estiramiento y toca Terminar');
+    else if(all) toast(e.n+': completado');
+    else if(!e.time) openRest(W.ph.rest,'Descanso');
+  }
   updateProg();
 }
 function updateProg(){
@@ -643,7 +680,8 @@ function finishWorkout(){
   const mins=Math.max(1,Math.round(W.acc/60000));
   const [done,total]=setsDone();
   if(!DB.start) DB.start=dayKey(new Date());
-  DB.history.unshift({date:dayKey(new Date()),day:W.key,cardio:!!W.day.cardio,min:mins,sets:done,total});
+  const detail={}; for(const id in W.sets) if(W.sets[id].some(v=>v!=null)) detail[id]=W.sets[id].slice();
+  DB.history.unshift({date:dayKey(new Date()),day:W.key,cardio:!!W.day.cardio,min:mins,sets:done,total,detail});
   save(); haptic([30,40,30]);
   const wk=thisWeekSessions().length;
   document.getElementById('cel-text').textContent = `${W.day.short}, ${mins} ${mins===1?'minuto':'minutos'}, ${done} de ${total} series. ${!W.day.cardio && wk>=3 ? 'Con esta completaste la semana.' : !W.day.cardio ? `Llevas ${wk} de 3 esta semana.` : 'Buen complemento para la semana.'}`;
@@ -803,9 +841,10 @@ function renderProgress(){
   renderMeasures(); renderBackup();
   const h=document.getElementById('p-hist');
   if(!DB.history.length){ h.innerHTML='<div class="empty">Todavía no hay sesiones registradas.<br>Aquí irán apareciendo conforme las termines.</div>'; return; }
-  h.innerHTML=DB.history.slice(0,40).map(x=>{
+  h.innerHTML=DB.history.slice(0,40).map((x,i)=>{
     const d=fromKey(x.date); const name=x.cardio?'Cardio suave':DAYS[x.day].short+' · '+DAYS[x.day].sub;
-    return `<div><div><b>${name}</b><br><span>${DN[d.getDay()]} ${longDate(x.date)}</span></div><div style="text-align:right;flex-shrink:0"><span class="badge">${x.min} min</span><br><span>${x.sets} de ${x.total} series</span></div></div>`;
+    const det = x.detail ? Object.entries(x.detail).map(([id,v])=>`<p><b>${EX[id]?EX[id].n:id}</b><span>${v.map(n=>n==null?'—':n+(EX[id]&&EX[id].time?' s':'')).join(' · ')}</span></p>`).join('') : '';
+    return `<div class="${det?'h-row':''}" ${det?`onclick="this.nextElementSibling.classList.toggle('open')"`:''}><div><b>${name}</b><br><span>${DN[d.getDay()]} ${longDate(x.date)}${det?' · toca para ver detalle':''}</span></div><div style="text-align:right;flex-shrink:0"><span class="badge">${x.min} min</span><br><span>${x.sets} de ${x.total} series</span></div></div>${det?`<div class="h-detail">${det}</div>`:''}`;
   }).join('');
 }
 function askReset(){

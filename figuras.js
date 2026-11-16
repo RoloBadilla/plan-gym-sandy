@@ -293,9 +293,11 @@
     if (!def) { container.innerHTML = '<p class="fig-miss">Cierra y vuelve a abrir la app para ver el dibujo.</p>'; return; }
     container.innerHTML = `<svg viewBox="${fitBox(def)}" role="img" aria-label="Animación del ejercicio"><g>${staticSvg(def)}</g><g class="fig"></g></svg><button class="fig-btn" type="button"></button>`;
     const g = container.querySelector('.fig');
-    g.innerHTML = frameSvg(def, poseAt(def, reduce ? 1 : 0));
-    const f = { def, g, t: Math.random() * 300, paused: false, btn: container.querySelector('.fig-btn') };
-    setPaused(f, reduce);
+    // Empieza en pausa, mostrando la postura clave del ejercicio
+    const t = def.loop ? def.loop * 250 : ((def.down || 1.6) + (def.hold ?? 0.4)) * 1000 - 1;
+    g.innerHTML = frameSvg(def, poseAt(def, progressAt(t, def)));
+    const f = { def, g, t, paused: true, btn: container.querySelector('.fig-btn') };
+    setPaused(f, true);
     f.btn.addEventListener('click', e => { e.stopPropagation(); setPaused(f, !f.paused); });
     container._fig = f;
     if (io) io.observe(container);
