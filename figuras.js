@@ -246,14 +246,15 @@
 
   // ---------- Browser player ----------
   const live = new Set();
-  let raf = null, t0 = 0;
+  let raf = null, last = 0;
   function tick(now) {
-    if (!t0) t0 = now;
+    const dt = last ? Math.min(100, now - last) : 0; last = now;
     for (const f of live) {
-      const J = poseAt(f.def, progressAt(now - t0 + f.offset, f.def));
-      f.g.innerHTML = frameSvg(f.def, J);
+      if (f.paused) continue;
+      f.t += dt;
+      f.g.innerHTML = frameSvg(f.def, poseAt(f.def, progressAt(f.t, f.def)));
     }
-    raf = live.size ? requestAnimationFrame(tick) : null;
+    if (live.size) raf = requestAnimationFrame(tick); else { raf = null; last = 0; }
   }
   const reduce = root.matchMedia ? root.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
   const io = root.IntersectionObserver ? new IntersectionObserver(es => {
@@ -280,12 +281,22 @@
     return [cx - w / 2, bottom - h, w, h].map(v => v.toFixed(1)).join(' ');
   }
 
+  const PAUSE = '<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>';
+  const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>';
+  function setPaused(f, v) {
+    f.paused = v;
+    f.btn.innerHTML = (v ? PLAY : PAUSE) + `<span>${v ? 'Reproducir' : 'Pausar'}</span>`;
+    f.btn.setAttribute('aria-label', v ? 'Reproducir animación' : 'Pausar animación');
+  }
   function mount(container, id) {
-    const def = EXFIG[id]; if (!def) return;
-    container.innerHTML = `<svg viewBox="${fitBox(def)}" role="img" aria-label="Animación del ejercicio"><g>${staticSvg(def)}</g><g class="fig"></g></svg>`;
+    const def = EXFIG[id];
+    if (!def) { container.innerHTML = '<p class="fig-miss">Cierra y vuelve a abrir la app para ver el dibujo.</p>'; return; }
+    container.innerHTML = `<svg viewBox="${fitBox(def)}" role="img" aria-label="Animación del ejercicio"><g>${staticSvg(def)}</g><g class="fig"></g></svg><button class="fig-btn" type="button"></button>`;
     const g = container.querySelector('.fig');
     g.innerHTML = frameSvg(def, poseAt(def, reduce ? 1 : 0));
-    const f = { def, g, offset: Math.random() * 300 };
+    const f = { def, g, t: Math.random() * 300, paused: false, btn: container.querySelector('.fig-btn') };
+    setPaused(f, reduce);
+    f.btn.addEventListener('click', e => { e.stopPropagation(); setPaused(f, !f.paused); });
     container._fig = f;
     if (io) io.observe(container);
   }

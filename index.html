@@ -107,7 +107,11 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .ex-head .meta strong{color:var(--accent);font-weight:600}
 .ex-body{padding:0 14px 14px}
 .anim{border-radius:14px;overflow:hidden;background:#fbfbfc;box-shadow:inset 0 0 0 1px var(--line);aspect-ratio:300/210;margin-bottom:6px}
+.anim{position:relative}
 .anim svg{display:block;width:100%;height:100%}
+.fig-btn{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:6px;padding:8px 12px 8px 10px;border-radius:99px;background:rgba(255,255,255,.92);box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 1px var(--line);font-size:13px;font-weight:600;color:var(--text)}
+.fig-btn svg{width:16px!important;height:16px!important;fill:currentColor}
+.fig-miss{display:grid;place-items:center;height:100%;padding:20px;text-align:center;font-size:14px;color:var(--text2)}
 .yt{display:block;font-size:13px;color:var(--text2);text-align:right;padding:4px 4px 10px;text-decoration:none}
 .yt u{text-decoration:none;color:var(--accent);font-weight:600}
 .tip{font-size:14.5px;color:var(--text2);line-height:1.5;background:var(--bg);padding:12px 14px;border-radius:12px;margin-bottom:12px}
@@ -390,7 +394,7 @@ nav button.on{color:var(--ink)}
 
 <div class="toast" id="toast"></div>
 
-<script src="figuras.js"></script>
+<script src="figuras.js?v=5"></script>
 <script>
 // ---------- Ejercicios ----------
 // v = video de YouTube (opcional, necesita internet). time = ejercicio por tiempo (segundos).
