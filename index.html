@@ -117,8 +117,48 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
 .set.on{background:var(--green);color:#fff;box-shadow:none}
 .tools{display:flex;gap:8px;margin-top:8px}
 .tool{flex:1;padding:13px 8px;border-radius:12px;background:var(--accent2);font-size:14px;font-weight:600;color:var(--accent)}
-.finish{width:100%;padding:17px;border-radius:14px;background:var(--ink);color:#fff;font-weight:600;font-size:17px;margin:10px 0 24px}
-.finish:disabled{opacity:.35}
+
+/* guided warm-up / stretch */
+.guide{padding:16px 16px 14px;margin-bottom:12px}
+.g-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:0 2px}
+.g-head h3{font-size:17px;font-weight:600;letter-spacing:-.012em}
+.g-head span{font-size:13px;color:var(--text2)}
+.g-head span.ok{color:var(--green);font-weight:600}
+.g-stage{margin-top:12px;position:relative}
+.g-stage .anim{margin-bottom:0}
+.g-now{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.g-now b{display:block;font-size:18px;font-weight:600;letter-spacing:-.012em;line-height:1.25}
+.g-now small{display:block;font-size:13.5px;color:var(--accent);font-weight:600;margin-top:2px}
+.g-time{font-size:40px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+.g-bar{height:5px;background:rgba(0,0,0,.07);border-radius:99px;overflow:hidden;margin-top:10px}
+.g-bar i{display:block;height:100%;background:var(--accent);border-radius:99px;width:0}
+.g-tip{font-size:14.5px;color:var(--text2);line-height:1.5;margin-top:10px}
+.g-steps{margin-top:12px;border-top:1px solid var(--line)}
+.g-steps div{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--text2)}
+.g-steps div:last-child{border-bottom:0}
+.g-steps div i{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;background:var(--bg);color:var(--text3)}
+.g-steps div.cur{color:var(--text);font-weight:600}
+.g-steps div.cur i{background:var(--accent);color:#fff}
+.g-steps div.ok i{background:var(--green);color:#fff}
+.g-steps div span{margin-left:auto;font-size:13px;color:var(--text3);font-weight:500}
+.g-btns{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:12px}
+.g-btns .cta{font-size:15px;padding:13px 8px}
+.w-hint{font-size:13.5px;color:var(--text2);text-align:center;margin:4px 0 20px}
+
+/* session control bar */
+body.in-workout nav{display:none}
+body.in-workout{padding-bottom:calc(150px + var(--sab))}
+.wbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(245,245,247,.86);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:1px solid var(--line);padding:10px 18px calc(10px + var(--sab))}
+body.in-workout .wbar{display:block}
+.wbar .in{max-width:500px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.wbar .cta{padding:16px 8px}
+.wbar .cta.done{background:var(--green)}
+.wbar .cta:disabled{opacity:.45}
+.wbar .stop{background:var(--card);color:var(--accent);box-shadow:0 0 0 1px var(--line2)}
+.wbar .link{display:block;max-width:500px;margin:4px auto 0;padding:6px}
+.wbar .link[hidden]{display:none}
+.wbar .cta.busy:disabled{opacity:1;background:#e6e6eb;color:var(--text);font-size:15px}
+.timer.paused{color:var(--accent)}
 
 /* overlays */
 .overlay{position:fixed;inset:0;background:rgba(245,245,247,.88);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);display:none;align-items:center;justify-content:center;z-index:50;flex-direction:column;gap:18px;padding:24px}
@@ -234,31 +274,16 @@ nav button.on{color:var(--ink)}
 <!-- ENTRENAMIENTO -->
 <section class="screen" id="s-workout">
   <div class="topbar">
-    <button class="back" onclick="go('home')" aria-label="Volver">‹</button>
+    <button class="back" onclick="leaveWorkout()" aria-label="Volver">‹</button>
     <h2 id="w-title">Sesión A</h2>
     <div class="timer" id="w-timer">00:00</div>
   </div>
   <div class="pbar"><i id="w-prog"></i></div>
   <div class="wk-note" id="w-note"></div>
-  <div class="card phase">
-    <h3>Calentamiento · 5 minutos</h3>
-    <ul>
-      <li>Marcha en el lugar levantando las rodillas, 2 minutos</li>
-      <li>Círculos de brazos hacia adelante y hacia atrás, 1 minuto</li>
-      <li>Sentadillas lentas, sin bajar del todo, 2 minutos</li>
-    </ul>
-  </div>
+  <div class="card guide" id="g-warm"></div>
   <div id="w-list"></div>
-  <div class="card phase">
-    <h3>Estiramiento · 5 minutos</h3>
-    <ul>
-      <li>Cuádriceps de pie, llevando el talón al glúteo: 30 segundos por lado</li>
-      <li>Isquiotibiales sentada, tratando de tocar los pies: 45 segundos</li>
-      <li>Glúteo en figura 4, acostada: 30 segundos por lado</li>
-      <li>Espalda en postura del niño: 45 segundos</li>
-    </ul>
-  </div>
-  <button class="finish" id="w-finish" onclick="finishWorkout()">Terminar sesión</button>
+  <div class="card guide" id="g-stretch"></div>
+  <p class="w-hint">Al final, toca <b>Terminar</b> para guardar la sesión.</p>
 </section>
 
 <!-- PROGRESO -->
@@ -335,6 +360,14 @@ nav button.on{color:var(--ink)}
   <button data-s="guide" onclick="go('guide')"><svg viewBox="0 0 24 24"><path d="M5 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5z"/><path d="M19 4h-5a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h6z"/></svg>Indicaciones</button>
 </div></nav>
 
+<div class="wbar" id="w-bar">
+  <div class="in">
+    <button class="cta" id="w-main" onclick="mainAction()">Iniciar</button>
+    <button class="cta stop" id="w-stop" onclick="stopSession()">Parar</button>
+  </div>
+  <button class="link" id="w-early" onclick="finishEarly()" hidden>Terminar la sesión aquí</button>
+</div>
+
 <div class="overlay" id="rest">
   <h3 id="rest-label">Descanso</h3>
   <div class="rring" id="ring"><b id="rest-n">60</b></div>
@@ -386,6 +419,18 @@ const DAYS = {
   B:{title:'Sesión B · Brazos, espalda y abdomen',short:'Sesión B',tag:'B',sub:'Brazos, espalda y abdomen',list:['pushup','dips','row','lateral','superman','deadbug'],min:40},
   C:{title:'Sesión C · Cuerpo completo',short:'Sesión C',tag:'C',sub:'Cuerpo completo y abdomen',list:['sldl','jump','bridge1','climb','bike','sideplank'],min:40},
   D:{title:'Cardio suave y abdomen',short:'Cardio',tag:'+',sub:'Opcional · 25 a 30 minutos',list:['bike','deadbug','plank'],min:30,cardio:true}
+};
+// Calentamiento y estiramiento guiados (s = segundos; sides = se hace de cada lado)
+const GUIDES = {
+  warm:{title:'Calentamiento',steps:[
+    {id:'march',n:'Marcha en el lugar',s:120,t:'Sube las rodillas hasta la altura de la cadera y mueve los brazos al ritmo. Paso cómodo, sin saltar.'},
+    {id:'armcircle',n:'Círculos de brazos',s:60,flip:true,t:'Brazos estirados a los lados, haz círculos grandes y lentos. A la mitad del tiempo, cambia de dirección.'},
+    {id:'halfsquat',n:'Sentadillas lentas',s:120,t:'Baja solo hasta la mitad, despacio, y sube. Es para calentar rodillas y cadera, no para cansarte.'}]},
+  stretch:{title:'Estiramiento',steps:[
+    {id:'quad',n:'Cuádriceps de pie',s:30,sides:true,t:'Apóyate en una pared con una mano. Con la otra, lleva el talón al glúteo. Rodillas juntas y espalda recta.'},
+    {id:'ham',n:'Isquiotibiales sentada',s:45,t:'Sentada con las piernas estiradas, inclínate hacia adelante con la espalda recta y lleva las manos hacia los pies. Sin rebotar.'},
+    {id:'fig4',n:'Glúteo en figura 4',s:30,sides:true,t:'Boca arriba, cruza un tobillo sobre la rodilla contraria y jala esa pierna hacia el pecho. Lo sientes en el glúteo.'},
+    {id:'child',n:'Postura del niño',s:45,t:'De rodillas, siéntate sobre los talones, inclínate hacia adelante y estira los brazos en el piso. Respira lento.'}]}
 };
 const MEAS = [
   {k:'cintura',n:'Cintura',u:'cm',h:'A la altura del ombligo'},
@@ -500,10 +545,12 @@ function hideNotice(k){ DB.noticeOff[k]= k==='measure' ? dayKey(new Date()) : tr
 function remindersAdded(){ DB.remind=true; save(); setTimeout(()=>{ renderNotice(); toast('Toca "Agregar todo" en el Calendario'); },600); }
 
 // ---------- Sesión ----------
+// Estados: idle (sin empezar) -> running -> paused -> running ... -> terminar
 let W=null, wTick=null;
+function elapsed(){ return W ? W.acc + (W.state==='running' ? Date.now()-W.since : 0) : 0; }
 function startWorkout(k){
   const d=DAYS[k], ph=phase();
-  W={key:k,day:d,sets:{},start:Date.now(),ph};
+  W={key:k,day:d,sets:{},ph,state:'idle',acc:0,since:0};
   document.getElementById('w-title').textContent=d.title;
   document.getElementById('w-note').innerHTML=`<b>Semana ${ph.w}.</b> ${ph.txt}`;
   if(window.Figuras) Figuras.unmountAll();
@@ -523,41 +570,148 @@ function startWorkout(k){
       </div></div>`;
   });
   document.getElementById('w-list').innerHTML=html;
+  resetGuides();
+  document.body.classList.add('in-workout');
   go('workout');
   if(window.Figuras) document.querySelectorAll('#w-list .anim').forEach(el=>Figuras.mount(el, el.dataset.fig));
-  updateProg();
+  renderGuide('warm'); renderGuide('stretch');
   clearInterval(wTick);
-  document.getElementById('w-timer').textContent='00:00';
-  wTick=setInterval(()=>{ document.getElementById('w-timer').textContent=fmt(Math.floor((Date.now()-W.start)/1000)); },1000);
+  wTick=setInterval(tickSession,250);
+  updateProg(); tickSession();
+}
+function tickSession(){
+  if(!W) return;
+  document.getElementById('w-timer').textContent=fmt(Math.floor(elapsed()/1000));
+  document.getElementById('w-timer').classList.toggle('paused',W.state==='paused');
+  tickGuide();
+}
+function allDone(){ return Object.values(W.sets).flat().every(Boolean); }
+function setsDone(){ const a=Object.values(W.sets).flat(); return [a.filter(Boolean).length,a.length]; }
+function updateBar(){
+  const m=document.getElementById('w-main'), st=document.getElementById('w-stop'), early=document.getElementById('w-early');
+  const [done,total]=setsDone();
+  m.disabled=false; m.classList.remove('done','busy');
+  if(allDone()){ m.textContent='Terminar'; m.classList.add('done'); }
+  else if(W.state==='idle'){ m.textContent='Iniciar'; }
+  else if(W.state==='paused'){ m.textContent='Seguir'; }
+  else { m.textContent=`En marcha · ${done} de ${total} series`; m.disabled=true; m.classList.add('busy'); }
+  st.disabled = W.state!=='running';
+  early.hidden = !(W.state==='paused' && done>0 && !allDone());
+}
+function mainAction(){
+  if(allDone()) return finishWorkout();
+  if(W.state==='idle'){ startRunning(); if(!G.warm.done && !W.day.cardio) guidePlay('warm'); else if(W.day.cardio) toast('Empieza con el cardio suave'); }
+  else if(W.state==='paused'){ startRunning(); if(G._resume) guidePlay(G._resume); G._resume=null; }
+}
+function startRunning(){ W.state='running'; W.since=Date.now(); haptic(10); updateBar(); tickSession(); }
+function stopSession(){
+  if(W.state!=='running') return;
+  W.acc+=Date.now()-W.since; W.state='paused';
+  G._resume = G.warm.running ? 'warm' : G.stretch.running ? 'stretch' : null;
+  guidePause('warm'); guidePause('stretch');
+  toast('Sesión en pausa'); updateBar(); tickSession();
 }
 function toggleSet(id,j){
+  if(W.state==='idle') startRunning();
+  if(W.state==='paused') startRunning();
   W.sets[id][j]=!W.sets[id][j];
   document.getElementById(`set-${id}-${j}`).classList.toggle('on',W.sets[id][j]);
   const all=W.sets[id].every(Boolean);
   document.getElementById('ex-'+id).classList.toggle('complete',all);
   if(W.sets[id][j]) haptic(10);
-  if(all) toast(EX[id].n+': completado');
+  if(allDone()) toast('Listo. Haz el estiramiento y toca Terminar');
+  else if(all) toast(EX[id].n+': completado');
   else if(W.sets[id][j] && !EX[id].time) openRest(W.ph.rest,'Descanso');
   updateProg();
 }
 function updateProg(){
-  const all=Object.values(W.sets).flat(); const done=all.filter(Boolean).length;
-  document.getElementById('w-prog').style.width=(done/all.length*100)+'%';
-  const f=document.getElementById('w-finish'); f.disabled = done===0;
-  f.textContent = done===all.length?'Terminar sesión':`Terminar sesión (${done} de ${all.length} series)`;
+  const [done,total]=setsDone();
+  document.getElementById('w-prog').style.width=(done/total*100)+'%';
+  updateBar();
+}
+function finishEarly(){
+  const [done,total]=setsDone();
+  ask('Terminar la sesión aquí',`Llevas ${done} de ${total} series. Se guarda la sesión con lo que hiciste.`,'Terminar y guardar',finishWorkout);
 }
 function finishWorkout(){
-  clearInterval(wTick);
-  const mins=Math.max(1,Math.round((Date.now()-W.start)/60000));
-  const all=Object.values(W.sets).flat(); const done=all.filter(Boolean).length;
+  if(W.state==='running'){ W.acc+=Date.now()-W.since; W.state='paused'; }
+  clearInterval(wTick); guidePause('warm'); guidePause('stretch');
+  const mins=Math.max(1,Math.round(W.acc/60000));
+  const [done,total]=setsDone();
   if(!DB.start) DB.start=dayKey(new Date());
-  DB.history.unshift({date:dayKey(new Date()),day:W.key,cardio:!!W.day.cardio,min:mins,sets:done,total:all.length});
+  DB.history.unshift({date:dayKey(new Date()),day:W.key,cardio:!!W.day.cardio,min:mins,sets:done,total});
   save(); haptic([30,40,30]);
   const wk=thisWeekSessions().length;
-  document.getElementById('cel-text').textContent = `${W.day.short}, ${mins} ${mins===1?'minuto':'minutos'}, ${done} de ${all.length} series. ${!W.day.cardio && wk>=3 ? 'Con esta completaste la semana.' : !W.day.cardio ? `Llevas ${wk} de 3 esta semana.` : 'Buen complemento para la semana.'}`;
+  document.getElementById('cel-text').textContent = `${W.day.short}, ${mins} ${mins===1?'minuto':'minutos'}, ${done} de ${total} series. ${!W.day.cardio && wk>=3 ? 'Con esta completaste la semana.' : !W.day.cardio ? `Llevas ${wk} de 3 esta semana.` : 'Buen complemento para la semana.'}`;
+  W=null;
   document.getElementById('celebrate').classList.add('show');
 }
 function celClose(){ document.getElementById('celebrate').classList.remove('show'); go('home'); }
+function leaveWorkout(){
+  if(W && W.state!=='idle' && setsDone()[0]>0){
+    ask('¿Salir de la sesión?','Si sales ahora, no se guarda lo que llevas. Para guardarla, toca Parar y luego "Terminar la sesión aquí".','Salir sin guardar',()=>{ W=null; clearInterval(wTick); guidePause('warm'); guidePause('stretch'); go('home'); },true);
+  } else { W=null; clearInterval(wTick); guidePause('warm'); guidePause('stretch'); go('home'); }
+}
+
+// ---------- Calentamiento y estiramiento guiados ----------
+let G={};
+function units(key){ const u=[]; GUIDES[key].steps.forEach((st,i)=>{ if(st.sides){ u.push({i,st,side:'Lado derecho',s:st.s}); u.push({i,st,side:'Lado izquierdo',s:st.s}); } else u.push({i,st,side:'',s:st.s}); }); return u; }
+function resetGuides(){ G={_resume:null}; for(const k in GUIDES){ const u=units(k); G[k]={u,idx:0,left:u[0].s*1000,running:false,done:false,last:0,flipped:false}; } }
+const mmss=ms=>{ const s=Math.ceil(ms/1000); return Math.floor(s/60)+':'+pad(s%60); };
+function totalMin(key){ const s=units(key).reduce((a,b)=>a+b.s,0); return s%60 ? `${Math.floor(s/60)} min y medio` : `${s/60} minutos`; }
+function renderGuide(key){
+  const g=G[key], gd=GUIDES[key], box=document.getElementById('g-'+key);
+  if(W && W.day.cardio && key==='warm'){ box.style.display='none'; return; } else box.style.display='';
+  const cur=g.u[Math.min(g.idx,g.u.length-1)];
+  const head=`<div class="g-head"><h3>${gd.title}</h3>${g.done?'<span class="ok">Hecho</span>':`<span>${totalMin(key)}</span>`}</div>`;
+  const steps=`<div class="g-steps">${gd.steps.map((st,i)=>{ const state = g.done || i<cur.i ? 'ok' : (i===cur.i ? 'cur' : ''); return `<div class="${state}"><i>${state==='ok'?'✓':i+1}</i>${st.n}<span>${st.sides?st.s+' s por lado':(st.s>=60?st.s/60+' min':st.s+' s')}</span></div>`; }).join('')}</div>`;
+  if(g.done){ box.innerHTML=head+steps; return; }
+  const label = g.running ? 'Pausa' : (g.idx===0 && g.left===cur.s*1000 ? `Empezar ${gd.title.toLowerCase()}` : 'Seguir');
+  box.innerHTML = head + `<div class="g-stage"><div class="anim" id="ga-${key}"></div></div>
+    <div class="g-now"><div><b>${cur.st.n}</b><small>${cur.side || `Paso ${cur.i+1} de ${gd.steps.length}`}</small></div><div class="g-time" id="gt-${key}">${mmss(g.left)}</div></div>
+    <div class="g-bar"><i id="gb-${key}"></i></div>
+    <p class="g-tip">${cur.st.t}</p>
+    <div class="g-btns"><button class="cta ${g.running?'ghost':''}" onclick="guideToggle('${key}')">${label}</button><button class="cta ghost" onclick="guideSkip('${key}')">Saltar</button></div>` + steps;
+  if(window.Figuras) Figuras.mount(document.getElementById('ga-'+key), cur.st.id);
+  drawGuideTime(key);
+}
+function drawGuideTime(key){
+  const g=G[key], cur=g.u[g.idx]; if(!cur) return;
+  const t=document.getElementById('gt-'+key), b=document.getElementById('gb-'+key);
+  if(t) t.textContent=mmss(g.left);
+  if(b) b.style.width=(100-g.left/(cur.s*1000)*100)+'%';
+}
+function guidePlay(key){
+  for(const k in GUIDES) if(k!==key && G[k].running) guidePause(k);
+  const g=G[key]; if(g.done) return;
+  g.running=true; g.last=Date.now();
+  if(W && W.state!=='running') startRunning();
+  renderGuide(key);
+  const el=document.getElementById('g-'+key); if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function guidePause(key){ const g=G[key]; if(!g||!g.running) return; g.running=false; renderGuide(key); }
+function guideToggle(key){ G[key].running ? guidePause(key) : guidePlay(key); }
+function guideSkip(key){ nextUnit(key,false); }
+function nextUnit(key,beepIt){
+  const g=G[key]; const prev=g.u[g.idx];
+  g.idx++; g.flipped=false;
+  if(beepIt) beep();
+  if(g.idx>=g.u.length){ g.done=true; g.running=false; toast(`${GUIDES[key].title} listo`); renderGuide(key); return; }
+  const cur=g.u[g.idx]; g.left=cur.s*1000;
+  if(cur.side==='Lado izquierdo' && prev.st===cur.st) toast('Cambia de lado');
+  else toast('Sigue: '+cur.st.n);
+  renderGuide(key);
+}
+function tickGuide(){
+  if(!W) return;
+  for(const key in GUIDES){
+    const g=G[key]; if(!g || !g.running) continue;
+    const now=Date.now(); g.left-=now-g.last; g.last=now;
+    const cur=g.u[g.idx];
+    if(cur.st.flip && !g.flipped && g.left<=cur.s*500){ g.flipped=true; toast('Cambia de dirección'); haptic(20); }
+    if(g.left<=0) nextUnit(key,true); else drawGuideTime(key);
+  }
+}
 
 // ---------- Descanso ----------
 let rLeft=0,rTotal=0,rT=null;
@@ -661,7 +815,8 @@ function go(s){
   document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
   document.getElementById('s-'+s).classList.add('active');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
-  if(s==='home'){ clearInterval(wTick); renderHome(); }
+  if(s!=='workout') document.body.classList.remove('in-workout');
+  if(s==='home'){ renderHome(); }
   if(s==='progress') renderProgress();
   window.scrollTo(0,0);
 }

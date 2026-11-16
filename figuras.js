@@ -61,7 +61,8 @@
       const S = { arm1: ['sh1', 'ua1', 'fa1', L.ua, L.fa], arm2: ['sh2', 'ua2', 'fa2', L.ua, L.fa], leg1: ['hp1', 'th1', 'sh1', L.th, L.sh], leg2: ['hp2', 'th2', 'sh2', L.th, L.sh] };
       for (const limb in p.ik) {
         const [from, k1, k2, a, b] = S[limb];
-        const [tx, ty, bend] = p.ik[limb];
+        let [tx, ty, bend] = p.ik[limb];
+        if (typeof tx === 'string') { bend = ty; [tx, ty] = J[tx]; }
         const [a1, a2] = ik(J[from], [tx, ty], a, b, bend);
         q[k1] = a1; q[k2] = a2;
       }
@@ -81,7 +82,7 @@
     for (const k of ANG) if (A[k] !== undefined) o[k] = A[k] + ((B[k] ?? A[k]) - A[k]) * t;
     if (A.ik) {
       o.ik = {};
-      for (const l in A.ik) { const a = A.ik[l], b = (B.ik && B.ik[l]) || a; o.ik[l] = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2]]; }
+      for (const l in A.ik) { const a = A.ik[l], b = (B.ik && B.ik[l]) || a; o.ik[l] = typeof a[0] === 'string' ? a : [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2]]; }
     }
     return o;
   }
@@ -144,7 +145,30 @@
       { torso: 198, headA: 207, ua1: -70, fa1: 175, ua2: -66, fa2: 178, th1: -16, sh1: -16, ft1: -60, th2: -110, sh2: 0, ft2: -60, anchor: ['hip', 175, 183] }] },
     sideplank: { props: ['mat'], hl: ['torso'], k: [
       { torso: -10, ua1: -90, fa1: -90, ua2: 92, fa2: 0, th1: 170, sh1: 170, ft1: 80, th2: 171, sh2: 171, ft2: 80, anchor: ['elbow2', 195, 186] },
-      { torso: -11, ua1: -90, fa1: -90, ua2: 92, fa2: 0, th1: 169, sh1: 169, ft1: 80, th2: 170, sh2: 170, ft2: 80, anchor: ['elbow2', 195, 186] }] }
+      { torso: -11, ua1: -90, fa1: -90, ua2: 92, fa2: 0, th1: 169, sh1: 169, ft1: 80, th2: 170, sh2: 170, ft2: 80, anchor: ['elbow2', 195, 186] }] },
+    // ----- Calentamiento -----
+    march: { hl: ['th'], down: .55, up: .55, hold: .05, k: [
+      P(STAND, { ua1: 130, fa1: 70, ua2: 50, fa2: 20, th1: 5, sh1: 95, th2: 90, sh2: 90, anchor: ['hip', 150, 108] }),
+      P(STAND, { ua1: 50, fa1: 20, ua2: 130, fa2: 70, th1: 90, sh1: 90, th2: 5, sh2: 95, anchor: ['hip', 150, 108] })] },
+    armcircle: { view: 'front', hl: ['ua'], loop: 2.2, k: [
+      P(FSTAND, { ua1: 90, fa1: 90, ua2: 90, fa2: 90, anchor: ['ankle1', 140, 186] }),
+      P(FSTAND, { ua1: 450, fa1: 450, ua2: -270, fa2: -270, anchor: ['ankle1', 140, 186] })] },
+    halfsquat: { hl: ['th', 'glute'], down: 1.4, up: 1.2, k: [
+      P(STAND, { ua1: 60, fa1: 40, ua2: 64, fa2: 44, anchor: ['ankle1', 150, 186] }),
+      P(STAND, { torso: -70, ua1: 0, fa1: 0, ua2: 4, fa2: 2, th1: 45, sh1: 108, th2: 48, sh2: 106, anchor: ['ankle1', 150, 186] })] },
+    // ----- Estiramiento -----
+    quad: { hl: ['th1'], down: 2.2, up: 2.2, hold: .6, k: [
+      P(STAND, { ua2: 0, fa2: -6, th1: 100, sh1: -118, ft1: 150, ik: { arm1: ['ankle1', -1] }, anchor: ['ankle2', 150, 186] }),
+      P(STAND, { ua2: 0, fa2: -6, th1: 104, sh1: -122, ft1: 150, ik: { arm1: ['ankle1', -1] }, anchor: ['ankle2', 150, 186] })] },
+    ham: { props: ['mat'], hl: ['th', 'sh'], down: 2.4, up: 2.4, hold: .6, k: [
+      { torso: -62, ua1: 25, fa1: 20, ua2: 28, fa2: 22, th1: 0, sh1: 0, ft1: -80, th2: -1, sh2: 0, ft2: -80, anchor: ['hip', 105, 183] },
+      { torso: -32, headA: -24, ua1: 8, fa1: 4, ua2: 10, fa2: 6, th1: 0, sh1: 0, ft1: -80, th2: -1, sh2: 0, ft2: -80, anchor: ['hip', 105, 183] }] },
+    fig4: { props: ['mat'], hl: ['glute', 'th1'], down: 2.4, up: 2.4, hold: .6, k: [
+      { torso: 180, headA: 180, th2: -100, sh2: -8, ft2: -80, th1: -30, sh1: 172, ft1: 170, ua1: -60, fa1: -40, ua2: -60, fa2: -40, ik: { arm1: ['knee2', 1], arm2: ['knee2', 1] }, anchor: ['hip', 175, 183] },
+      { torso: 180, headA: 180, th2: -118, sh2: -12, ft2: -80, th1: -46, sh1: 168, ft1: 170, ua1: -60, fa1: -40, ua2: -60, fa2: -40, ik: { arm1: ['knee2', 1], arm2: ['knee2', 1] }, anchor: ['hip', 175, 183] }] },
+    child: { props: ['mat'], hl: ['torso'], down: 2.6, up: 2.6, hold: .4, k: [
+      { torso: 14, headA: 22, ua1: 4, fa1: 0, ua2: 6, fa2: 0, th1: 36, sh1: 180, ft1: 180, th2: 36, sh2: 180, ft2: 180, anchor: ['knee1', 140, 187] },
+      { torso: 18, headA: 24, ua1: 6, fa1: 2, ua2: 8, fa2: 2, th1: 36, sh1: 180, ft1: 180, th2: 36, sh2: 180, ft2: 180, anchor: ['knee1', 140, 187] }] }
   };
 
   // ---------- Drawing ----------
@@ -205,7 +229,8 @@
   const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   // Timeline: A -> B in 1.6 s, hold 0.4 s, B -> A in 1.0 s, hold 0.4 s
   function progressAt(ms, def) {
-    const down = (def.down || 1.6) * 1000, hold = 400, up = (def.up || 1.0) * 1000;
+    if (def.loop) return (ms % (def.loop * 1000)) / (def.loop * 1000);
+    const down = (def.down || 1.6) * 1000, hold = (def.hold ?? 0.4) * 1000, up = (def.up || 1.0) * 1000;
     const cyc = down + hold + up + hold, t = ms % cyc;
     if (t < down) return ease(t / down);
     if (t < down + hold) return 1;
