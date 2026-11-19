@@ -368,7 +368,7 @@ nav button.on{color:var(--ink)}
     </ul>
     <p style="margin-top:8px">El peso es opcional. Al tonificar, a veces la báscula casi no cambia y las medidas sí.</p></div>
   <div class="card g"><h3>Qué necesitas</h3>
-    <p>Tu propio peso. Si quieres, <b>dos botellas de agua</b> de litro o litro y medio y una <b>banda elástica</b>. Una colchoneta o una toalla gruesa para los ejercicios en el piso.</p></div>
+    <p>Solo tu propio peso, una <b>silla firme</b> para los fondos y una colchoneta o una toalla gruesa para los ejercicios en el piso. Si quieres más reto en la sentadilla sumo, puedes sostener una botella de agua contra el pecho.</p></div>
   <div class="card g"><h3>Para que se note</h3>
     <p>El ejercicio hace su parte, pero el resto lo hacen la comida y el sueño. Procura incluir proteína en cada comida (huevo, pollo, pescado, frijoles, yogur), tomar agua durante el día y dormir entre siete y nueve horas.</p></div>
   <div class="card g" style="box-shadow:0 1px 2px rgba(0,0,0,.04),0 0 0 1.5px var(--accent)"><h3>Cuándo parar</h3>
@@ -412,7 +412,7 @@ nav button.on{color:var(--ink)}
 
 <div class="toast" id="toast"></div>
 
-<script src="figuras.js?v=6"></script>
+<script src="figuras.js?v=7"></script>
 <script>
 // ---------- Ejercicios ----------
 // v = video de YouTube (opcional, necesita internet). time = ejercicio por tiempo (segundos).
@@ -427,6 +427,8 @@ const EX = {
   dips:{p:'Va directo al tríceps, la parte de atrás del brazo que suele quedar flácida.',n:'Fondos de tríceps en silla',r:'10 a 12 repeticiones',m:'Tríceps',v:'cd9ENqQttTc',t:'Manos en el borde de una silla firme. Piernas dobladas para que sea más fácil, estiradas para que cueste más. Baja doblando los codos hacia atrás, no hacia los lados.'},
   row:{p:'Fortalece la espalda alta y mejora la postura: hombros atrás y espalda recta.',n:'Remo inclinada',r:'12 repeticiones',m:'Espalda y bíceps',v:'4GIKJ7GTea8',t:'Con la banda o las botellas. Inclina el tronco con la espalda recta y lleva los codos hacia atrás, <b>juntando los omóplatos</b>. Baja despacio.'},
   lateral:{p:'Le da forma a los hombros, y eso hace que la cintura se vea más pequeña.',n:'Elevaciones laterales',r:'12 repeticiones',m:'Hombros',v:'V3LaKO8iZUE',t:'Con las botellas. Sube los brazos a los lados hasta la altura de los hombros, con los codos un poco doblados y sin impulso. Baja en dos segundos.'},
+  pull:{p:'Fortalece la espalda alta y mejora la postura, sin necesidad de peso.',n:'Jalones boca abajo',r:'12 repeticiones',m:'Espalda y hombros',v:'tplJkuM2vkY',t:'Acostada boca abajo, con los brazos estirados al frente y un poco despegados del piso. Baja los codos hacia las costillas <b>juntando los omóplatos</b>, aguanta un segundo y vuelve. Mira al piso. (El dibujo la muestra vista desde arriba).'},
+  taps:{p:'Trabaja los hombros y además el abdomen, porque tienes que mantener la cadera quieta.',n:'Toques de hombro en plancha',r:'10 por lado',m:'Hombros y abdomen',v:'_yaLcqzgLdA',t:'En posición de flexión, <b>con las rodillas apoyadas si cuesta</b>. Toca el hombro contrario con una mano, vuelve y cambia de mano. La cadera no se mueve.'},
   superman:{p:'Fortalece la espalda baja y previene dolores. Equilibra el trabajo de abdomen.',n:'Superman',r:'12 repeticiones',m:'Espalda baja y glúteos',v:'7p4l-KnxxaY',t:'Boca abajo con los brazos al frente. Levanta brazos y piernas a la vez, aguanta un segundo y baja. Mira al piso para no forzar el cuello.'},
   deadbug:{p:'Trabaja el abdomen profundo, el que aplana la panza, sin forzar el cuello.',n:'Dead bug',r:'10 por lado',m:'Abdomen profundo',v:'SPTBzZdINlg',t:'Boca arriba, rodillas a 90 grados y brazos hacia el techo. Estira el brazo y la pierna contrarios sin que la <b>espalda baja se despegue del piso</b>. Vuelve y cambia de lado.'},
   sldl:{p:'Trabaja glúteos y la parte de atrás del muslo, además del equilibrio.',n:'Peso muerto a una pierna',r:'10 por lado',m:'Glúteos, isquiotibiales y equilibrio',v:'u8g_1Q_E8G4',t:'Sin peso. Inclina el tronco hacia adelante mientras la otra pierna va hacia atrás, con la espalda recta. Baja hasta donde sientas el estiramiento y sube apretando el glúteo.'},
@@ -438,7 +440,7 @@ const EX = {
 };
 const DAYS = {
   A:{title:'Sesión A · Piernas y glúteos',short:'Sesión A',tag:'A',sub:'Piernas y glúteos',list:['squat','bridge','rlunge','kick','sumo','plank'],min:40},
-  B:{title:'Sesión B · Brazos, espalda y abdomen',short:'Sesión B',tag:'B',sub:'Brazos, espalda y abdomen',list:['pushup','dips','row','lateral','superman','deadbug'],min:40},
+  B:{title:'Sesión B · Brazos, espalda y abdomen',short:'Sesión B',tag:'B',sub:'Brazos, espalda y abdomen',list:['pushup','dips','pull','taps','superman','deadbug'],min:40},
   C:{title:'Sesión C · Cuerpo completo',short:'Sesión C',tag:'C',sub:'Cuerpo completo y abdomen',list:['sldl','jump','bridge1','climb','bike','sideplank'],min:40},
   D:{title:'Cardio suave y abdomen',short:'Cardio',tag:'+',sub:'Opcional · 25 a 30 minutos',list:['bike','deadbug','plank'],min:30,cardio:true}
 };

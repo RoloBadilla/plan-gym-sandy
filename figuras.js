@@ -146,6 +146,13 @@
     sideplank: { props: ['mat'], hl: ['torso'], k: [
       { torso: -10, ua1: -90, fa1: -90, ua2: 92, fa2: 0, th1: 170, sh1: 170, ft1: 80, th2: 171, sh2: 171, ft2: 80, anchor: ['elbow2', 195, 186] },
       { torso: -11, ua1: -90, fa1: -90, ua2: 92, fa2: 0, th1: 169, sh1: 169, ft1: 80, th2: 170, sh2: 170, ft2: 80, anchor: ['elbow2', 195, 186] }] },
+    taps: { props: ['mat'], hl: ['ua', 'torso'], down: .7, up: .6, hold: .25, k: [
+      { torso: -30, th1: 150, sh1: 205, ft1: 180, th2: 150, sh2: 205, ft2: 180, ua1: 90, fa1: 90, ua2: 90, fa2: 90, ik: { arm1: [190, 188, 1], arm2: [194, 188, 1] }, anchor: ['knee1', 112, 187] },
+      { torso: -30, th1: 150, sh1: 205, ft1: 180, th2: 150, sh2: 205, ft2: 180, ua1: 90, fa1: 90, ua2: 90, fa2: 90, ik: { arm1: [186, 152, -1], arm2: [194, 188, 1] }, anchor: ['knee1', 112, 187] }] },
+    // Vista desde arriba (acostada boca abajo): brazos al frente -> codos a las costillas, en forma de W
+    pull: { view: 'front', noFloor: true, hl: ['ua', 'torso'], down: 1.2, up: 1.0, hold: .6, k: [
+      P(FSTAND, { ua1: -104, fa1: -100, ua2: -76, fa2: -80, th1: 93, sh1: 91, ft1: 100, th2: 87, sh2: 89, ft2: 80, anchor: ['hip', 150, 106] }),
+      P(FSTAND, { ua1: -212, fa1: -100, ua2: 32, fa2: -80, th1: 93, sh1: 91, ft1: 100, th2: 87, sh2: 89, ft2: 80, anchor: ['hip', 150, 106] })] },
     // ----- Calentamiento -----
     march: { hl: ['th'], down: .55, up: .55, hold: .05, k: [
       P(STAND, { ua1: 130, fa1: 70, ua2: 50, fa2: 20, th1: 5, sh1: 95, th2: 90, sh2: 90, anchor: ['hip', 150, 108] }),
@@ -211,7 +218,7 @@
 
   function staticSvg(def) {
     const p = [];
-    p.push(`<line x1="-200" y1="${FLOOR + 1}" x2="500" y2="${FLOOR + 1}" stroke="${COLOR.floor}" stroke-width="2" stroke-linecap="round"/>`);
+    if (!def.noFloor) p.push(`<line x1="-200" y1="${FLOOR + 1}" x2="500" y2="${FLOOR + 1}" stroke="${COLOR.floor}" stroke-width="2" stroke-linecap="round"/>`);
     if ((def.props || []).includes('mat')) p.push(`<rect x="30" y="${FLOOR - 3}" width="240" height="4" rx="2" fill="${COLOR.mat}"/>`);
     if ((def.props || []).includes('chair')) p.push(`<g fill="none" stroke="${COLOR.prop}" stroke-width="5" stroke-linecap="round"><line x1="62" y1="143" x2="120" y2="143"/><line x1="66" y1="143" x2="66" y2="${FLOOR}"/><line x1="116" y1="143" x2="116" y2="${FLOOR}"/><line x1="66" y1="143" x2="66" y2="88"/></g>`);
     return p.join('');
